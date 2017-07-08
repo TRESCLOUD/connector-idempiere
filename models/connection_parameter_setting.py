@@ -2,8 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models, fields, api, _
-from idempierewsc.idempierewsc.base import LoginRequest
-from idempierewsc.idempierewsc.net import WebServiceConnection
+from idempierewsc.base import LoginRequest
+from idempierewsc.net import WebServiceConnection
 
 class connection_parameter_setting(models.Model):
     _name = 'idempiere_synchronizer_so.connection_parameter_setting'

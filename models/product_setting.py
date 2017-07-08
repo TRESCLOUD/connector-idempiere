@@ -3,9 +3,9 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from idempierewsc.idempierewsc.request import QueryDataRequest
-from idempierewsc.idempierewsc.net import WebServiceConnection
-from idempierewsc.idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.request import QueryDataRequest
+from idempierewsc.net import WebServiceConnection
+from idempierewsc.enums import WebServiceResponseStatus
 
 import traceback
 

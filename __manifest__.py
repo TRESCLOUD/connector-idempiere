@@ -8,7 +8,10 @@
     through iDempire WebService""",
 
     'description': """
-    Sales Order Synchronizer between Odoo and Idempiere
+    Sales Order Synchronizer between Odoo and Idempiere,
+
+    Using Book Libraries of Saúl Piña sauljabin@gmail.com
+    https://github.com/sauljabin/idempierewsc-python
     """,
 
     'author': "TRESCLOUD CIA LTDA - Contributor: Freddy Heredia",

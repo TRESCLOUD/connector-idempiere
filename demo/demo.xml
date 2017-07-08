@@ -1,7 +1,7 @@
 <odoo>
     <data>
         <!--  -->
-        <record id="object0" model="idempiere_synchronizer_so.connection_parameter_setting">
+        <record id="object" model="idempiere_synchronizer_so.connection_parameter_setting">
             <field name="idempiere_url">http://localhost:8084</field>
             <field name="idempiere_urls">https://localhost:8444</field>
             <field name="idempiere_login_client_id">11</field>
@@ -10,17 +10,17 @@
             <field name="idempiere_login_password">System</field>
             <field name="idempiere_login_user">SuperUser</field>
         </record>
-        <record id="object0" model="idempiere_synchronizer_so.customer_setting">
+        <record id="object1" model="idempiere_synchronizer_so.customer_setting">
             <field name="odoo_key_column_name">ref</field>
             <field name="idempiere_key_column_name">value</field>
             <field name="idempiere_web_service_type">QueryBPartnerTest</field>
         </record>
-        <record id="object0" model="idempiere_synchronizer_so.product_setting">
+        <record id="object2" model="idempiere_synchronizer_so.product_setting">
             <field name="odoo_key_column_name">default_code</field>
             <field name="idempiere_key_column_name">value</field>
             <field name="idempiere_web_service_type">QueryProductTest</field>
         </record>
-        <record id="object0" model="idempiere_synchronizer_so.sale_order_setting">
+        <record id="object3" model="idempiere_synchronizer_so.sale_order_setting">
             <field name="idempiere_c_doctypetarget_id">132</field>
             <field name="idempiere_ad_org_id">11</field>
             <field name="idempiere_m_warehouse_id">103</field>

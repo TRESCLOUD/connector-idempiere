@@ -7,16 +7,16 @@ from connection_parameter_setting import connection_parameter_setting
 from customer_setting import customer_setting
 from product_setting import product_setting
 from sale_order_setting import sale_order_setting
-from idempierewsc.idempierewsc.request import QueryDataRequest
-from idempierewsc.idempierewsc.request import CreateDataRequest
-from idempierewsc.idempierewsc.request import SetDocActionRequest
-from idempierewsc.idempierewsc.request import CompositeOperationRequest
-from idempierewsc.idempierewsc.base import LoginRequest
-from idempierewsc.idempierewsc.enums import WebServiceResponseStatus
-from idempierewsc.idempierewsc.net import WebServiceConnection
-from idempierewsc.idempierewsc.base import Field
-from idempierewsc.idempierewsc.base import Operation
-from idempierewsc.idempierewsc.enums import DocAction
+from idempierewsc.request import QueryDataRequest
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.request import SetDocActionRequest
+from idempierewsc.request import CompositeOperationRequest
+from idempierewsc.base import LoginRequest
+from idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.net import WebServiceConnection
+from idempierewsc.base import Field
+from idempierewsc.base import Operation
+from idempierewsc.enums import DocAction
 import traceback
 
 class sale_order_synchronizer():

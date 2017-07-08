@@ -18,7 +18,7 @@
       <field name="name">idempiere_synchronizer_so_product_setting form</field>
       <field name="model">idempiere_synchronizer_so.product_setting</field>
       <field name="arch" type="xml">
-        <form string="iDempiere Customer Setting">
+        <form string="iDempiere Product Setting">
             <sheet>
                 <group>
                     <field name="odoo_key_column_name"/>

@@ -3,15 +3,15 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from idempierewsc.idempierewsc.request import QueryDataRequest
-from idempierewsc.idempierewsc.net import WebServiceConnection
-from idempierewsc.idempierewsc.enums import WebServiceResponseStatus
-from idempierewsc.idempierewsc.base import Operation
-from idempierewsc.idempierewsc.request import CreateDataRequest
-from idempierewsc.idempierewsc.base import Field
-from idempierewsc.idempierewsc.request import CompositeOperationRequest
-from idempierewsc.idempierewsc.enums import DocAction
-from idempierewsc.idempierewsc.request import SetDocActionRequest
+from idempierewsc.request import QueryDataRequest
+from idempierewsc.net import WebServiceConnection
+from idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.base import Operation
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.base import Field
+from idempierewsc.request import CompositeOperationRequest
+from idempierewsc.enums import DocAction
+from idempierewsc.request import SetDocActionRequest
 import traceback
 
 class sale_order_setting(models.Model):
