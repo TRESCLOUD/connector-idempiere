@@ -11,9 +11,14 @@
             <field name="idempiere_login_user">SuperUser</field>
         </record>
         <record id="object0" model="idempiere_synchronizer_so.customer_setting">
-            <field name="odoo_key_column_name">taxid</field>
-            <field name="idempiere_key_column_name">taxid</field>
+            <field name="odoo_key_column_name">ref</field>
+            <field name="idempiere_key_column_name">value</field>
             <field name="idempiere_web_service_type">QueryBPartnerTest</field>
+        </record>
+        <record id="object0" model="idempiere_synchronizer_so.product_setting">
+            <field name="odoo_key_column_name">default_code</field>
+            <field name="idempiere_key_column_name">value</field>
+            <field name="idempiere_web_service_type">QueryProductTest</field>
         </record>
         <record id="object0" model="idempiere_synchronizer_so.sale_order_setting">
             <field name="idempiere_c_doctypetarget_id">132</field>

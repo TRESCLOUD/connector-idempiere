@@ -6,3 +6,4 @@ from . import sale_order_setting
 from . import connection_parameter_setting
 from . import sale_order_synchronizer
 from . import sales_order_custom
+from . import product_setting

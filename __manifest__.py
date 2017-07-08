@@ -30,6 +30,8 @@
         'views/customer_setting.xml',
         'views/sale_order_setting.xml',
         'views/connection_parameter_setting.xml',
+        'views/product_setting.xml',
+        'views/sale_order_custom.xml',
 
     ],
     # only loaded in demonstration mode
