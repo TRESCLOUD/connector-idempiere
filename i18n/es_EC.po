@@ -1,0 +1,251 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* idempiere_synchronizer_so
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-02 20:45+0000\n"
+"PO-Revision-Date: 2017-07-02 20:45+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.menu,name:idempiere_synchronizer_so.conecction_parameter_setting
+msgid "Connection"
+msgstr "Conexión"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,name:idempiere_synchronizer_so.idempiere_synchronizer_so_connection_parameter_setting_action_window
+msgid "Connection Parameter Setting window"
+msgstr "Configuración de Conexión"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,help:idempiere_synchronizer_so.idempiere_synchronizer_so_connection_parameter_setting_action_window
+msgid "Create the first Connection Parameter Setting"
+msgstr "Create the first Connection Parameter Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,help:idempiere_synchronizer_so.idempiere_synchronizer_so_customer_setting_action_window
+msgid "Create the first Customer Setting"
+msgstr "Create the first Customer Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,help:idempiere_synchronizer_so.idempiere_synchronizer_so_sale_order_setting_action_window
+msgid "Create the first Sale Order Setting"
+msgstr "Create the first Sale Order Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_create_uid
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_create_uid
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_create_uid
+msgid "Created by"
+msgstr "Creado por:"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_create_date
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_create_date
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_create_date
+msgid "Created on"
+msgstr "Creado"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.menu,name:idempiere_synchronizer_so.customer_setting
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,name:idempiere_synchronizer_so.idempiere_synchronizer_so_customer_setting_action_window
+msgid "Customer Setting window"
+msgstr "Customer Setting window"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_display_name
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_display_name
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_display_name
+msgid "Display Name"
+msgstr "Nombre a Mostrar"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_id
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_id
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_id
+msgid "ID"
+msgstr "ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting___last_update
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting___last_update
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting___last_update
+msgid "Last Modified on"
+msgstr "Fecha de modificación"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_write_uid
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_write_uid
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_write_uid
+msgid "Last Updated by"
+msgstr "Ultima Actualización por"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_write_date
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_write_date
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_write_date
+msgid "Last Updated on"
+msgstr "Actualizado en"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_odoo_key_column_name
+msgid "Odoo Key Column Name"
+msgstr "Odoo Key Column Name"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.menu,name:idempiere_synchronizer_so.sale_order_setting
+msgid "Sale Order"
+msgstr "Sale Order"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.actions.act_window,name:idempiere_synchronizer_so.idempiere_synchronizer_so_sale_order_setting_action_window
+msgid "Sale Order Setting window"
+msgstr "Sale Order Setting window"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.menu,name:idempiere_synchronizer_so.setting
+msgid "Setting"
+msgstr "Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.view,arch_db:idempiere_synchronizer_so.idempiere_synchronizer_so_connection_parameter_setting_form
+msgid "Settings"
+msgstr "Configuración"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.menu,name:idempiere_synchronizer_so.menu_root
+msgid "Synchronizer"
+msgstr "Synchronizer"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_login_client_id
+msgid "iDempiere AD_Client_ID"
+msgstr "iDempiere AD_Client_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_ad_org_id
+msgid "iDempiere AD_Org_ID"
+msgstr "iDempiere AD_Org_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_login_org_id
+msgid "iDempiere AD_Orge_ID"
+msgstr "iDempiere AD_Orge_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_login_role_id
+msgid "iDempiere AD_Role_ID"
+msgstr "iDempiere AD_Role_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_login_user
+msgid "iDempiere AD_User_ID"
+msgstr "iDempiere AD_User_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_c_doctypetarget_id
+msgid "iDempiere C_DocTypeTarget_ID"
+msgstr "Tipo de Documento de Venta iDempiere"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_composite_web_service_type
+msgid "iDempiere Composite WebService Type"
+msgstr "Tipo de Servicio WEB iDempiere"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.view,arch_db:idempiere_synchronizer_so.idempiere_synchronizer_so_connection_parameter_setting_form
+msgid "iDempiere Connection Setting"
+msgstr "iDempiere Connection Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.view,arch_db:idempiere_synchronizer_so.idempiere_synchronizer_so_customer_setting_form
+msgid "iDempiere Customer Setting"
+msgstr "iDempiere Customer Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_customer_web_service_type
+msgid "iDempiere Customer WebService Type"
+msgstr "iDempiere Customer WebService Type"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_docaction_web_service_type
+msgid "iDempiere DocAction WebService Type"
+msgstr "iDempiere DocAction WebService Type"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_idempiere_key_column_name
+msgid "iDempiere Key Column Name"
+msgstr "iDempiere Key Column Name"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_m_pricelist_id
+msgid "iDempiere M_PriceList_ID"
+msgstr "iDempiere M_PriceList_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_m_warehouse_id
+msgid "iDempiere M_Warehouse_ID"
+msgstr "iDempiere M_Warehouse_ID"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_order_web_service_type
+msgid "iDempiere Order WebService Type"
+msgstr "iDempiere Order WebService Type"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_sale_order_setting_idempiere_orderline_web_service_type
+msgid "iDempiere OrderLine WebService Type"
+msgstr "iDempiere OrderLine WebService Type"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_login_password
+msgid "iDempiere Password"
+msgstr "iDempiere Password"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.ui.view,arch_db:idempiere_synchronizer_so.idempiere_synchronizer_so_sale_order_setting_form
+msgid "iDempiere Sale Order Setting"
+msgstr "iDempiere Sale Order Setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_url
+msgid "iDempiere URL"
+msgstr "iDempiere URL"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_connection_parameter_setting_idempiere_urls
+msgid "iDempiere URLs"
+msgstr "iDempiere URLs"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model.fields,field_description:idempiere_synchronizer_so.field_idempiere_synchronizer_so_customer_setting_idempiere_web_service_type
+msgid "iDempiere WebService Type"
+msgstr "iDempiere WebService Type"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model,name:idempiere_synchronizer_so.model_idempiere_synchronizer_so_connection_parameter_setting
+msgid "idempiere_synchronizer_so.connection_parameter_setting"
+msgstr "idempiere_synchronizer_so.connection_parameter_setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model,name:idempiere_synchronizer_so.model_idempiere_synchronizer_so_customer_setting
+msgid "idempiere_synchronizer_so.customer_setting"
+msgstr "idempiere_synchronizer_so.customer_setting"
+
+#. module: idempiere_synchronizer_so
+#: model:ir.model,name:idempiere_synchronizer_so.model_idempiere_synchronizer_so_sale_order_setting
+msgid "idempiere_synchronizer_so.sale_order_setting"
+msgstr "idempiere_synchronizer_so.sale_order_setting"
+

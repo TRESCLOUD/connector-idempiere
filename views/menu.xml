@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Synchronizer" id="idempiere_synchronizer_so.menu_root"/>
+
+    <!-- menu categories -->
+      <!-- TO-DO: Entity Update -->
+      <!--
+        <menuitem name="Entity" id="idempiere_synchronizer_so.entity" parent="idempiere_synchronizer_so.menu_root"/>
+      -->
+    <menuitem name="Setting" id="idempiere_synchronizer_so.setting" parent="idempiere_synchronizer_so.menu_root"/>
+    -->
+
+      <!-- TO-DO: Entity Update -->
+      <!--
+        <menuitem name="Customer" id="idempiere_synchronizer_so.customer" parent="idempiere_synchronizer_so.entity"
+              action="idempiere_synchronizer_so.action_window"/>
+      -->
+
+
+  </data>
+</odoo>
