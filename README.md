@@ -1,0 +1,1 @@
+idempiere_synchronizer_so
