@@ -1,0 +1,71 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="connector_idempiere_salesorder_sale_order_setting_list">
+      <field name="name">connector_idempiere_salesorder_sale_order_setting list</field>
+      <field name="model">connector_idempiere_salesorder.sale_order_setting</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="idempiere_c_doctypetarget_id"/>
+          <field name="idempiere_ad_org_id"/>
+          <field name="idempiere_m_warehouse_id"/>
+          <field name="idempiere_m_pricelist_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="connector_idempiere_salesorder_sale_order_setting_form">
+      <field name="name">connector_idempiere_salesorder_sale_order_setting form</field>
+      <field name="model">connector_idempiere_salesorder.sale_order_setting</field>
+      <field name="arch" type="xml">
+        <form string="iDempiere Sale Order Setting">
+            <sheet>
+              <group name="settings" string="Settings" >
+                <group>
+                  <field name="idempiere_c_doctypetarget_id"/>
+                  <field name="idempiere_ad_org_id"/>
+                  <field name="idempiere_m_warehouse_id"/>
+                  <field name="idempiere_m_pricelist_id"/>
+                </group>
+                <group>
+                  <field name="idempiere_customer_web_service_type"/>
+                  <field name="idempiere_order_web_service_type"/>
+                  <field name="idempiere_orderline_web_service_type"/>
+                  <field name="idempiere_docaction_web_service_type"/>
+                  <field name="idempiere_composite_web_service_type"/>
+                </group>
+              </group>
+
+            </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="connector_idempiere_salesorder_sale_order_setting_search">
+        <field name="name">connector_idempiere_salesorder_sale_order_setting search</field>
+        <field name="model">connector_idempiere_salesorder.sale_order_setting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="idempiere_c_doctypetarget_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="connector_idempiere_salesorder_sale_order_setting_action_window">
+      <field name="name">Sale Order Setting window</field>
+      <field name="res_model">connector_idempiere_salesorder.sale_order_setting</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="search_view_id" ref="connector_idempiere_salesorder_sale_order_setting_search" />
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">Create the first Sale Order Setting
+        </p>
+      </field>
+    </record>
+
+    <menuitem name="Sale Order" id="connector_idempiere_salesorder.sale_order_setting" parent="connector_idempiere.setting"
+              action="connector_idempiere_salesorder_sale_order_setting_action_window"/>
+
+  </data>
+</odoo>
