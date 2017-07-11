@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="object" model="connector_idempiere.connection_parameter_setting">
+            <field name="idempiere_url">http://localhost:8084</field>
+            <field name="idempiere_urls">https://localhost:8444</field>
+            <field name="idempiere_login_client_id">11</field>
+            <field name="idempiere_login_org_id">11</field>
+            <field name="idempiere_login_role_id">102</field>
+            <field name="idempiere_login_password">System</field>
+            <field name="idempiere_login_user">SuperUser</field>
+        </record>
+    </data>
+</odoo>

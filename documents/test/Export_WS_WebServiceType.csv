@@ -1,5 +1,0 @@
-WS_WebServiceType_ID,AD_Org_ID[Name],Value,Name,WS_WebService_ID[Value],WS_WebServiceMethod_ID[Value],AD_Table_ID[Name],Description,Help,IsActive,WS_WebService_Para>WS_WebServiceType_ID[Value],WS_WebService_Para>ParameterName,WS_WebService_Para>ParameterType,WS_WebService_Para>ConstantValue,WS_WebService_Para>WS_WebService_Para_ID,WS_WebService_Para>IsActive
-50000,*,ProcessInvoice,Process Invoice,ModelADService,runProcess,,Configuration of run process web service to process invoices,,Y,ProcessInvoice,AD_Process_ID,C,111,50000,Y
-,,,,,,,,,,ProcessInvoice,DocAction,C,CO,50001,Y
-,,,,,,,,,,ProcessInvoice,AD_Menu_ID,C,0,50002,Y
-,,,,,,,,,,ProcessInvoice,AD_Record_ID,F,,50003,Y

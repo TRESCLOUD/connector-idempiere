@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record id="object3" model="connector_idempiere_salesorder.sale_order_setting">
+            <field name="idempiere_c_doctypetarget_id">132</field>
+            <field name="idempiere_ad_org_id">11</field>
+            <field name="idempiere_m_warehouse_id">103</field>
+            <field name="idempiere_m_pricelist_id">101</field>
+            <field name="idempiere_customer_web_service_type">QueryBPartnerTest</field>
+            <field name="idempiere_order_web_service_type">CreateOrderTest</field>
+            <field name="idempiere_orderline_web_service_type">CreateOrderLineTest</field>
+            <field name="idempiere_docaction_web_service_type">DocActionOrderTest</field>
+            <field name="idempiere_composite_web_service_type">CompositeOrderTest</field>
+        </record>
+    </data>
+</odoo>

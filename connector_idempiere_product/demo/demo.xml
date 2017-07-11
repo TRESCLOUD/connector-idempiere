@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <!--  -->
+        <record id="object2" model="connector_idempiere_product.product_setting">
+            <field name="odoo_key_column_name">default_code</field>
+            <field name="idempiere_key_column_name">value</field>
+            <field name="idempiere_web_service_type">QueryProductTest</field>
+        </record>
+    </data>
+</odoo>

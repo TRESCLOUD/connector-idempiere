@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <!--  -->
+        <record id="object1" model="connector_idempiere_bpartner.customer_setting">
+            <field name="odoo_key_column_name">ref</field>
+            <field name="idempiere_key_column_name">value</field>
+            <field name="idempiere_web_service_type">QueryBPartnerTest</field>
+        </record>
+
+    </data>
+</odoo>
