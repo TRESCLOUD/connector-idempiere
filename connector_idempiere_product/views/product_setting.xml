@@ -24,6 +24,10 @@
                     <field name="odoo_key_column_name"/>
                     <field name="idempiere_key_column_name"/>
                     <field name="idempiere_web_service_type"/>
+                    <field name="limit"/>
+                    <field name="idempiere_filter"/>
+                    <button name="getproducts_from_idempiere" string="Update Product" type="object"
+                            class="oe_highlight"/>
                 </group>
             </sheet>
         </form>
@@ -49,7 +53,7 @@
       <field name="view_mode">tree,form</field>
       <field name="search_view_id" ref="connector_idempiere_product_product_setting_search" />
       <field name="help" type="html">
-        <p class="oe_view_nocontent_create">Create the first Customer Setting
+        <p class="oe_view_nocontent_create">Create the first Product Setting
         </p>
       </field>
 
