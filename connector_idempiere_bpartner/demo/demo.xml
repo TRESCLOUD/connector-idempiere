@@ -1,10 +1,15 @@
 <odoo>
     <data>
         <!--  -->
-        <record id="object1" model="connector_idempiere_bpartner.customer_setting">
+        <record id="idempiere_partner_setting" model="connector_idempiere_bpartner.customer_setting">
             <field name="odoo_key_column_name">ref</field>
             <field name="idempiere_key_column_name">value</field>
-            <field name="idempiere_web_service_type">QueryBPartnerTest</field>
+            <field name="read_bpartner_wst">QueryBPartnerTest</field>
+            <field name="create_bpartner_wst">CreateBPartnerTest</field>
+            <field name="create_contact_wst">CreateBPartnerContactTest</field>
+            <field name="create_bplocation_wst">CreateBPartnerBPLocation</field>
+            <field name="create_location_wst">CreateBPartnerCLocation</field>
+            <field name="composite_wst">CompositeBPartnerTest</field>
         </record>
 
     </data>

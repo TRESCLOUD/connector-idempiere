@@ -16,15 +16,20 @@ class product_setting(models.Model):
 
     odoo_key_column_name = fields.Char('Odoo Key Column Name',required=True)
     idempiere_key_column_name = fields.Char('iDempiere Key Column Name',required=True)
-    idempiere_web_service_type = fields.Char('iDempiere WebService Type',required=True)
-    idempiere_filter = fields.Text('iDempiere WebService Filter',required=False)
+    read_product_wst = fields.Char('WST Read a Product',required=True,help='Only Read a register, not create or update data')
+    get_product_wst = fields.Char('WST get Products',required=True,help='Web Service Type for get a list of Products and register in odoo')
+    idempiere_filter = fields.Char('iDempiere WebService Filter',required=False,help='')
     limit = fields.Integer('Limit',default=1)
+    result = fields.Text('Result')
 
-    #Get the idempiere record identifier (M_Product_ID) of a Product associated with an odoo sales order
     def getProductID(self,connection_parameter,productvalue):
-
+        """ Get the idempiere record identifier (M_Product_ID) of a Product associated with an odoo sales order
+            :param connection_parameter_setting connection_parameter
+            :param String productvalue
+            :return: M_Product_ID of idempiere
+        """
         ws = QueryDataRequest()
-        ws.web_service_type = self.idempiere_web_service_type
+        ws.web_service_type = self.read_product_wst
         ws.offset = 0
         ws.limit = 1
         ws.login = connection_parameter.getLogin()
@@ -51,11 +56,17 @@ class product_setting(models.Model):
         return productID
 
     def get_odoo_product(self,productvalue):
+        """ Get odoo product from env
+            :param string productvalue
+            :return: odoo product or False
+        """
         product = self.env['product.product'].search([(self.odoo_key_column_name, '=', str(productvalue))], limit=1)
         return product
 
     @api.one
     def getproducts_from_idempiere(self):
+        """ Create or Update odoo products from idempiere product Through webservice with idempiere_filter applied
+        """
         created_count = 0
         updated_count = 0
         connection_parameter = self.env['connector_idempiere.connection_parameter_setting'].search([('idempiere_login_client_id', '>', '0')], limit=1)
@@ -68,7 +79,7 @@ class product_setting(models.Model):
             }
 
         ws = QueryDataRequest()
-        ws.web_service_type = 'QueryProduct'
+        ws.web_service_type = self.get_product_wst
         ws.offset = 0
         ws.limit = self.limit
         ws.login = connection_parameter.getLogin()
@@ -77,6 +88,8 @@ class product_setting(models.Model):
 
         try:
             response = wsc.send_request(ws)
+            wsc.print_xml_request()
+            wsc.print_xml_response()
             if response.status == WebServiceResponseStatus.Error:
                 traceback.print_exc()
             else:
@@ -90,11 +103,7 @@ class product_setting(models.Model):
                         if str(column)=='category_name':
                             column = 'categ_id'
                             field.value = self.getCateg_id(str(field.value))
-                        if str(column)=='rate_taxe':
-                            column = 'taxes_id'
-                            field.value = self.getTax_id(str(field.value))
-                        values[column] = str(field.value)
-
+                        values[column] = field.value
 
                     product = self.get_odoo_product(value)
 
@@ -104,7 +113,12 @@ class product_setting(models.Model):
                     else:
                         product.name = values['name']
                         product.list_price = values['list_price']
+                        product.categ_id = values['categ_id']
                         updated_count = updated_count + 1
+
+                message= "Created Products : " + str(created_count) + ", Updated Products: "+  str(updated_count)
+                print message
+                self.result = message
         except:
             traceback.print_exc()
 
@@ -116,6 +130,13 @@ class product_setting(models.Model):
             }
 
     def getCateg_id(self,category_name):
-        return 1
-    def getTax_id(self,category_name):
+        """ Get the categ_id of odoo with name = category_name
+            :param string category_name
+            :return: id of product category
+        """
+        catetory = self.env['product.category'].search([("name", "=", str(category_name))], limit=1)
+        if catetory:
+            return catetory.id
+            print str(catetory.id)
+        print str(category_name)
         return 1
