@@ -20,9 +20,10 @@ class connection_parameter_setting(models.Model):
     idempiere_login_password = fields.Char('iDempiere Password',required=True)
     idempiere_login_user = fields.Char('iDempiere AD_User_ID',required=True)
 
-    #Get an object of type LoginRequest used in the authentication of webservices consumed
     def getLogin(self):
-
+        """ Get an object of type LoginRequest used in the authentication of webservices consumed
+            :return: (LoginRequest) loging
+        """
         login = LoginRequest()
         login.client_id = self.idempiere_login_client_id
         login.role_id = self.idempiere_login_role_id
@@ -32,9 +33,11 @@ class connection_parameter_setting(models.Model):
 
         return login
 
-    #Get an object of type WebServiceConnection used to establish connection with the
-    #  remote webservice through the configured url
     def getWebServiceConnection(self):
+        """ Get an object of type WebServiceConnection used to establish connection with the
+            remote webservice through the configured url
+            :return: (LoginRequest) loging
+        """
         wsc = WebServiceConnection()
         wsc.url = self.idempiere_urls
         wsc.attempts = 3

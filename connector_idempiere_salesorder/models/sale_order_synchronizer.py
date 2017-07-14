@@ -10,16 +10,19 @@ class sale_order_synchronizer():
 
 
     def synchronize_to_idempiere(self, order):
+        """ Send the odoo's sales order to be registered in idempiere
+            :param sale.order order
+        """
         print "synchronize_to_idempiere"
         connection_parameter = order.env['connector_idempiere.connection_parameter_setting'].search([('idempiere_login_client_id', '>', '0')], limit=1)
         if connection_parameter.id==False:
             order.toSchedule(_("No Connection Setting"))
             return False
-        customer_set = order.env['connector_idempiere_bpartner.customer_setting'].search([('idempiere_web_service_type', '!=', '')], limit=1)
+        customer_set = order.env['connector_idempiere_bpartner.customer_setting'].search([('read_bpartner_wst', '!=', '')], limit=1)
         if customer_set.id==False:
             order.toSchedule(_("No Customer Setting"))
             return False
-        product_set = order.env['connector_idempiere_product.product_setting'].search([('idempiere_web_service_type', '!=', '')], limit=1)
+        product_set = order.env['connector_idempiere_product.product_setting'].search([('read_product_wst', '!=', '')], limit=1)
         if product_set.id==False:
             order.toSchedule(_("No Product Setting"))
             return False
@@ -28,9 +31,9 @@ class sale_order_synchronizer():
             order.toSchedule(_("No Sale Order Setting"))
             return False
 
-        customerID = customer_set.getCustomerID(connection_parameter,order)
+        customerID = customer_set.getCustomerID(connection_parameter,order.partner_id)
         if customerID == 0:
-           customerID =  customer_set.sendCustomer(connection_parameter,order)
+           customerID =  customer_set.sendCustomer(connection_parameter,order.partner_id)
         if (customerID>0):
             success = order.sendOrder(connection_parameter,customerID,order,product_set,saleorder_set)
         else:

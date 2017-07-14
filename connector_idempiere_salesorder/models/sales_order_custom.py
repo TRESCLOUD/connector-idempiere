@@ -23,10 +23,10 @@ class sale_order_custom(models.Model):
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
 
-
-    #After confirming a sales order, the synchronization method is triggered.
     @api.multi
     def action_confirm(self):
+        """ After confirming a sales order, the synchronization method is triggered.
+        """
         self.ensure_one()
         res = super(sale_order_custom, self).action_confirm()
         print ('Synchronizing....')
@@ -39,8 +39,9 @@ class sale_order_custom(models.Model):
 
         return res
 
-    #Method to schedule a scheduled synchronization in case you can not synchronize online
     def toSchedule(self,message):
+        """ Method to schedule a scheduled synchronization in case you can not synchronize online
+        """
         if len(str(self.sync_message)) > 0:
             self.sync_message = str(self.sync_message) + " " +str(message)
         else:
@@ -54,9 +55,9 @@ class sale_order_custom(models.Model):
                 },
         }
 
-    #Sent from the header and lines of a Sales Order to iDempiere and execution of the action of the complete document.
     def sendOrder(self,connection_parameter,clienteid,order,product_setting,sales_order_setting):
-
+        """Sent from the header and lines of a Sales Order to iDempiere and execution of the action of the complete document.
+        """
         ws1 = CreateDataRequest()
         ws1.web_service_type = sales_order_setting.idempiere_order_web_service_type
         ws1.data_row = [Field('C_DocTypeTarget_ID', sales_order_setting.idempiere_c_doctypetarget_id),
@@ -90,7 +91,7 @@ class sale_order_custom(models.Model):
                 ws2lines.add(wsline)
             else:
                 productNotFound = True
-                order.toSchedule(_("Product Not Found")+ " " + line.product_id.default_code)
+                order.toSchedule(_("Product Not Found")+ " " + str(line.product_id.default_code))
 
         if productNotFound:
             return False

@@ -9,7 +9,6 @@
         <tree>
           <field name="odoo_key_column_name"/>
           <field name="idempiere_key_column_name"/>
-          <field name="idempiere_web_service_type"/>
         </tree>
       </field>
     </record>
@@ -23,8 +22,23 @@
                 <group>
                     <field name="odoo_key_column_name"/>
                     <field name="idempiere_key_column_name"/>
-                    <field name="idempiere_web_service_type"/>
                 </group>
+                <notebook>
+                    <page string="Read">
+                        <group>
+                            <field name="read_bpartner_wst"/>
+                        </group>
+                    </page>
+                    <page string="Create">
+                        <group>
+                            <field name="create_bpartner_wst"/>
+                            <field name="create_contact_wst"/>
+                            <field name="create_bplocation_wst"/>
+                            <field name="create_location_wst"/>
+                            <field name="composite_wst"/>
+                        </group>
+                    </page>
+                </notebook>
             </sheet>
         </form>
       </field>
