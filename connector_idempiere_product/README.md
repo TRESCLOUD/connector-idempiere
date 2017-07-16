@@ -1,5 +1,6 @@
 idempiere_synchronizer_so
 ===================
+Note: tested with version iDempiere 2.1
 
 Description
 -----------

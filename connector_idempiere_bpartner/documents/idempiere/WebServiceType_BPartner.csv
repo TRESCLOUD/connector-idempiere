@@ -1,0 +1,20 @@
+AD_Org_ID[Name],Value,Name,WS_WebService_ID[Value],WS_WebServiceMethod_ID[Value],AD_Table_ID[Name],Description,WS_WebService_Para>WS_WebServiceType_ID[Value],WS_WebService_Para>ParameterName,WS_WebService_Para>ParameterType,WS_WebService_Para>ConstantValue,WS_WebServiceFieldInput>WS_WebServiceType_ID[Value],WS_WebServiceFieldInput>AD_Column_ID[ColumnName],WS_WebServiceFieldInput>ColumnName,WS_WebServiceFieldInput>IsIdentifier,WS_WebServiceFieldInput>AD_Reference_ID[Name],WS_WebServiceFieldInput>IdentifierLogic,WS_WebServiceFieldInput>AD_Reference_Value_ID[Name],WS_WebServiceFieldInput>IsNullIdentifier,WS_WebServiceFieldInput>IsActive,WS_WebServiceFieldOutput>WS_WebServiceType_ID[Value],WS_WebServiceFieldOutput>AD_Column_ID[ColumnName]
+*,CreateBPartnerTest,CreateBPartnerTest,ModelADService,createData,Business Partner ,Configuration of Create Data web service to create business partners,CreateBPartnerTest,Action,C,Create,CreateBPartnerTest,Value,,N,Text,,,N,Y,CreateBPartnerTest,Name
+,,,,,,,CreateBPartnerTest,RecordID,F,,CreateBPartnerTest,Name,,N,Text,,,N,Y,CreateBPartnerTest,Value
+,,,,,,,CreateBPartnerTest,TableName,C,C_BPartner,CreateBPartnerTest,TaxID,,N,Text,,,N,Y,CreateBPartnerTest,C_BPartner_ID
+,,,,,,,,,,,,,,,,,,,,CreateBPartnerTest,TaxID
+*,QueryBPartnerTest,QueryBPartnerTest,ModelADService,queryData,Business Partner ,,QueryBPartnerTest,TableName,C,C_BPartner,,,,,,,,,,QueryBPartnerTest,Name
+,,,,,,,QueryBPartnerTest,Action,C,Read,,,,,,,,,,QueryBPartnerTest,C_BPartner_ID
+,,,,,,,QueryBPartnerTest,Filter,C,,,,,,,,,,,QueryBPartnerTest,Value
+,,,,,,,QueryBPartnerTest,RecordID,F,,,,,,,,,,,QueryBPartnerTest,TaxID
+*,CompositeBPartnerTest,CompositeBPartnerTest,CompositeInterface,composite,,,,,,,,,,,,,,,,,
+*,CreateBPartnerContactTest,CreateBPartnerContactTest,ModelADService,createData,User/Contact,Configuration of Create Data web service to create contact business partners,CreateBPartnerContactTest,RecordID,F,,CreateBPartnerContactTest,C_BPartner_ID,,N,ID,,,N,Y,CreateBPartnerContactTest,AD_User_ID
+,,,,,,,CreateBPartnerContactTest,TableName,C,AD_User,CreateBPartnerContactTest,Name,,N,String,,,N,Y,,
+,,,,,,,CreateBPartnerContactTest,Action,C,Create,CreateBPartnerContactTest,EMail,,N,String,,,N,Y,,
+*,CreateBPartnerBPLocation,CreateBPartnerBPLocation,ModelADService,createData,User/Contact,Configuration of Create Data web service to create BPartnerLocation business partners,CreateBPartnerBPLocation,RecordID,F,,CreateBPartnerBPLocation,C_BPartner_ID,,N,ID,,,N,Y,CreateBPartnerBPLocation,C_BPartner_Location_ID
+,,,,,,,CreateBPartnerBPLocation,TableName,C,C_BPartner_Location,CreateBPartnerBPLocation,AD_Client_ID,,N,ID,,,N,Y,,
+,,,,,,,CreateBPartnerBPLocation,Action,C,Create,CreateBPartnerBPLocation,C_Location_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,,CreateBPartnerBPLocation,Name,,N,String,,,N,Y,,
+*,CreateBPartnerCLocation,CreateBPartnerCLocation,ModelADService,createData,Address,Configuration of Create Data web service to create Location business partners,CreateBPartnerCLocation,RecordID,F,,CreateBPartnerCLocation,C_Country_ID,,N,ID,,,N,Y,CreateBPartnerCLocation,C_Location_ID
+,,,,,,,CreateBPartnerCLocation,TableName,C,C_Location,CreateBPartnerCLocation,City,,N,String,,,N,Y,,
+,,,,,,,CreateBPartnerCLocation,Action,C,Create,CreateBPartnerCLocation,Address1,,N,String,,,N,Y,,

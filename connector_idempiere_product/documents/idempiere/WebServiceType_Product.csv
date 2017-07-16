@@ -1,0 +1,10 @@
+AD_Org_ID[Name],Value,Name,WS_WebService_ID[Value],WS_WebServiceMethod_ID[Value],AD_Table_ID[Name],WS_WebService_Para>WS_WebServiceType_ID[Value],WS_WebService_Para>ParameterName,WS_WebService_Para>ParameterType,WS_WebService_Para>ConstantValue,WS_WebServiceFieldOutput>WS_WebServiceType_ID[Value],WS_WebServiceFieldOutput>AD_Column_ID[ColumnName]
+*,QueryProductTest,QueryProductTest,ModelADService,queryData,Product,QueryProductTest,TableName,C,M_Product,QueryProductTest,M_Product_ID
+,,,,,,QueryProductTest,RecordID,F,,,
+,,,,,,QueryProductTest,Action,C,Read,,
+,,,,,,QueryProductTest,Filter,C,,,
+*,QueryProduct,QueryProduct,ModelADService,queryData,product_product,QueryProduct,RecordID,F,,QueryProduct,Name
+,,,,,,QueryProduct,Filter,C,,QueryProduct,default_code
+,,,,,,QueryProduct,TableName,C,product_product,QueryProduct,list_price
+,,,,,,QueryProduct,Action,C,Read,QueryProduct,Type
+,,,,,,,,,,QueryProduct,category_name

@@ -1,0 +1,23 @@
+AD_Org_ID[Name],Value,Name,WS_WebService_ID[Value],WS_WebServiceMethod_ID[Value],AD_Table_ID[Name],WS_WebService_Para>WS_WebServiceType_ID[Value],WS_WebService_Para>ParameterName,WS_WebService_Para>ParameterType,WS_WebService_Para>ConstantValue,WS_WebServiceFieldInput>WS_WebServiceType_ID[Value],WS_WebServiceFieldInput>AD_Column_ID[ColumnName],WS_WebServiceFieldInput>ColumnName,WS_WebServiceFieldInput>IsIdentifier,WS_WebServiceFieldInput>AD_Reference_ID[Name],WS_WebServiceFieldInput>IdentifierLogic,WS_WebServiceFieldInput>AD_Reference_Value_ID[Name],WS_WebServiceFieldInput>IsNullIdentifier,WS_WebServiceFieldInput>IsActive,WS_WebServiceFieldOutput>WS_WebServiceType_ID[Value],WS_WebServiceFieldOutput>AD_Column_ID[ColumnName]
+*,CompositeOrderTest,CompositeOrderTest,CompositeInterface,composite,,,,,,,,,,,,,,,,
+*,CreateOrderTest,CreateOrderTest,ModelADService,createData,Order,CreateOrderTest,Action,C,Create,CreateOrderTest,C_DocTypeTarget_ID,,N,ID,,,N,Y,CreateOrderTest,C_Order_ID
+,,,,,,CreateOrderTest,RecordID,F,,CreateOrderTest,AD_Org_ID,,N,ID,,,N,Y,,
+,,,,,,CreateOrderTest,TableName,C,C_Order,CreateOrderTest,C_BPartner_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,CreateOrderTest,DateOrdered,,N,Date,,,N,Y,,
+,,,,,,,,,,CreateOrderTest,M_Warehouse_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,CreateOrderTest,SalesRep_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,CreateOrderTest,M_PriceList_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,CreateOrderTest,Description,,N,String,,,N,Y,,
+*,CreateOrderLineTest,CreateOrderLineTest,ModelADService,createData,Sales Order Line,CreateOrderLineTest,Action,C,Create,CreateOrderLineTest,AD_Org_ID,,N,ID,,,N,Y,CreateOrderLineTest,C_OrderLine_ID
+,,,,,,CreateOrderLineTest,RecordID,F,,CreateOrderLineTest,C_Order_ID,,N,ID,,,N,Y,,
+,,,,,,CreateOrderLineTest,TableName,C,C_OrderLine,CreateOrderLineTest,M_Product_ID,,N,ID,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,QtyEntered,,N,Quantity,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,PriceList,,N,Amount,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,PriceEntered,,N,Amount,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,QtyOrdered,,N,Quantity,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,Line,,N,Integer,,,N,Y,,
+,,,,,,,,,,CreateOrderLineTest,PriceActual,,N,Amount,,,N,Y,,
+*,DocActionOrderTest,DocActionOrderTest,ModelADService,setDocAction,,DocActionOrderTest,recordID,F,,,,,,,,,,,,
+,,,,,,DocActionOrderTest,recordIDVariable,F,,,,,,,,,,,,
+,,,,,,DocActionOrderTest,docAction,F,,,,,,,,,,,,
+,,,,,,DocActionOrderTest,tableName,C,C_Order,,,,,,,,,,,
