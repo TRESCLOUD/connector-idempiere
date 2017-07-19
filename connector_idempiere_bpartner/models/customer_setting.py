@@ -64,8 +64,8 @@ class customer_setting(models.Model):
         ws1 = CreateDataRequest()
         ws1.web_service_type = self.create_bpartner_wst #WebService to create the customer
         ws1.data_row = [Field('Name',  str(partner.name)),
-                        Field('Value', str(partner.ref)),
-                        Field('TaxID', str(partner.ref))]
+                        Field('Value', str(partner.vat)),
+                        Field('TaxID', str(partner.vat))]
 
 
         ws2 = CreateDataRequest()
@@ -95,14 +95,15 @@ class customer_setting(models.Model):
 
         wsc = connection.getWebServiceConnection()
         customerID = 0
-        try:
-            response = wsc.send_request(ws0)
-            wsc.print_xml_request()
-            wsc.print_xml_response()
+        
+        response = wsc.send_request(ws0)
+        wsc.print_xml_request()
+        wsc.print_xml_response()
+        
+        if response.status == WebServiceResponseStatus.Error:
+            raise UserError(_('Error de conexion %s') % response.error_message)
 
-            if response.status != WebServiceResponseStatus.Error:
-                customerID = int(response.responses[0].record_id)
-
-        except:
-            traceback.print_exc()
+        if response.status != WebServiceResponseStatus.Error:
+            customerID = int(response.responses[0].record_id)
+        
         return customerID

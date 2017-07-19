@@ -34,6 +34,7 @@ class sale_order_custom(models.Model):
         success = synchronizer.synchronize_to_idempiere(self)
 
         if success==False:
+            raise UserError(_('Error iDempiere: %s') % self.sync_message)
             message_body = "\n\n".join(self.sync_message)
             self.message_post(body=message_body, subject="Error")
 
@@ -96,11 +97,11 @@ class sale_order_custom(models.Model):
         if productNotFound:
             return False
 
-        ws3 = SetDocActionRequest()
-        ws3.web_service_type = sales_order_setting.idempiere_docaction_web_service_type
-        ws3.doc_action = DocAction.Complete
-        ws3.record_id_variable = '@C_Order.C_Order_ID'
-        ws3.record_id = 0
+        #ws3 = SetDocActionRequest()
+        #ws3.web_service_type = sales_order_setting.idempiere_docaction_web_service_type
+        #ws3.doc_action = DocAction.Complete
+        #ws3.record_id_variable = '@C_Order.C_Order_ID'
+        #ws3.record_id = 0
 
         ws0 = CompositeOperationRequest()
         ws0.login = connection_parameter.getLogin()
@@ -109,7 +110,7 @@ class sale_order_custom(models.Model):
         for wline in ws2lines:
             ws0.operations.append(Operation(wline))
 
-        ws0.operations.append(Operation(ws3))
+        #ws0.operations.append(Operation(ws3))
         ws0.web_service_type = sales_order_setting.idempiere_composite_web_service_type
 
         wsc = connection_parameter.getWebServiceConnection()
