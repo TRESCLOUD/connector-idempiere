@@ -86,41 +86,40 @@ class product_setting(models.Model):
         ws.filter= self.idempiere_filter
         wsc = connection_parameter.getWebServiceConnection()
 
-        try:
-            response = wsc.send_request(ws)
-            wsc.print_xml_request()
-            wsc.print_xml_response()
-            if response.status == WebServiceResponseStatus.Error:
-                traceback.print_exc()
-            else:
-                for row in response.data_set:
-                    values = {}
-                    for field in row:
-                        column = str(field.column).lower()
+        response = wsc.send_request(ws)
+        wsc.print_xml_request()
+        wsc.print_xml_response()
+        if response.status == WebServiceResponseStatus.Error:
+            raise UserError(_('Error iDempiere: %s') % response.error_message)
+            #traceback.print_exc()
+        else:
+            for row in response.data_set:
+                values = {}
+                for field in row:
+                    column = str(field.column).lower()
 
-                        if str(column)==self.odoo_key_column_name:
-                            value = str(field.value)
-                        if str(column)=='category_name':
-                            column = 'categ_id'
-                            field.value = self.getCateg_id(str(field.value))
-                        values[column] = field.value
+                    if str(column)==self.odoo_key_column_name:
+                        value = str(field.value)
+                    if str(column)=='category_name':
+                        column = 'categ_id'
+                        field.value = self.getCateg_id(str(field.value))
+                    values[column] = field.value
 
-                    product = self.get_odoo_product(value)
+                product = self.get_odoo_product(value)
 
-                    if not product:
-                        product = self.env['product.product'].create(values)
-                        created_count = created_count + 1
-                    else:
-                        product.name = values['name']
-                        product.list_price = values['list_price']
-                        product.categ_id = values['categ_id']
-                        updated_count = updated_count + 1
+                if not product:
+                    product = self.env['product.product'].create(values)
+                    created_count = created_count + 1
+                else:
+                    product.name = values['name']
+                    product.list_price = values['list_price']
+                    product.categ_id = values['categ_id']
+                    updated_count = updated_count + 1
 
-                message= "Created Products : " + str(created_count) + ", Updated Products: "+  str(updated_count)
-                print message
-                self.result = message
-        except:
-            traceback.print_exc()
+            message= "Created Products : " + str(created_count) + ", Updated Products: "+  str(updated_count)
+            print message
+            self.result = message
+
 
         return {
                 "warning":{
