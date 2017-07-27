@@ -31,7 +31,7 @@
         # 'security/ir.model.access.csv',
         'views/sale_order_setting.xml',
         'views/sale_order_custom.xml',
-
+        'views/res_partner_custom.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
