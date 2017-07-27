@@ -4,7 +4,7 @@
     'name': "Connector iDempiere (Sales Order)",
 
     'summary': """
-    Sales Order Synchronizer between odoo and idempiere
+    Sales Order Synchronizer between Odoo and iDempiere
     through iDempire WebService""",
 
     'description': """
@@ -14,7 +14,7 @@
     https://github.com/sauljabin/idempierewsc-python
     """,
 
-    'author': "TRESCLOUD CIA LTDA - Contributor: Freddy Heredia",
+    'author': "TRESCLOUD CIA LTDA - Contributors: Freddy Heredia, Andres Calle",
     'website': "http://www.trescloud.com",
 
     # Categories can be used to filter modules in modules listing
@@ -24,14 +24,17 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','sale','connector_idempiere','connector_idempiere_bpartner','connector_idempiere_product'],
+    'depends': ['base',
+                'sale',
+                'connector_idempiere_bpartner',
+                'connector_idempiere_product'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
         'views/sale_order_setting.xml',
         'views/sale_order_custom.xml',
-
+        'views/idempiere_document_type.xml',
+        'data/idempiere_document_type.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
