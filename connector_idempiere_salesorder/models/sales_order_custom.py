@@ -22,6 +22,16 @@ class sale_order_custom(models.Model):
 
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
+    
+    # Columns TRESCLOUD
+    contact_invoice_id = fields.Many2one('res.partner', string='Contact Invoice Address', 
+                                         readonly=True, required=True, 
+                                         states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                         help="Contact Invoice address for current sales order.")
+    contact_shipping_id = fields.Many2one('res.partner', string='Contact Delivery Address', 
+                                          readonly=True, required=True,
+                                          states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                          help="Contact Delivery address for current sales order.")
 
     @api.multi
     def action_confirm(self):
@@ -130,3 +140,28 @@ class sale_order_custom(models.Model):
             traceback.print_exc()
             order.toSchedule(_("Sync Error"))
             return False
+        
+    # TRESCLOUD
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """
+        Update the following fields when the partner is changed:
+        - contact_invoice_id
+        - contact_shipping_id
+        """
+        
+        super(sale_order_custom, self).onchange_partner_id()
+        if not self.partner_id:
+            self.update({
+                'contact_invoice_id': False,
+                'contact_shipping_id': False,
+            })
+            return
+
+        addr = self.partner_id.address_get()
+        values = {
+            'contact_invoice_id': addr['contact'],
+            'contact_shipping_id': addr['contact'],
+        }
+        self.update(values)
