@@ -27,20 +27,22 @@ class sale_order_custom(models.Model):
         """
         return self.partner_id.delivery_policy if self.partner_id else False
 
-    # Columns
-    scheduled = fields.Boolean('Scheduled for later sync',default=False)
-    sync_message = fields.Char('Sync message',default='')
-    
-    # Columns TRESCLOUD
-    delivery_policy = fields.Selection([
+    delivery_policy_selection = [
         ('A', 'Availability'),
         ('F', 'Force'),
         ('L', 'Complete Line'),
         ('M', 'Manual'),
         ('O', 'Complete Order'),
-        ('R', 'After Receipt'),
-        ], track_visibility='always', default=_default_delivery_policy,
-        help='Allow the user select the delivery policy type to be use in sale order')
+        ('R', 'After Receipt')]
+
+    # Columns
+    scheduled = fields.Boolean('Scheduled for later sync',default=False)
+    sync_message = fields.Char('Sync message',default='')
+    
+    # Columns TRESCLOUD
+    delivery_policy = fields.Selection(delivery_policy_selection, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                                       track_visibility='always', default=_default_delivery_policy,
+                                       help='Allow the user select the delivery policy type to be use in sale order')
     contact_invoice_id = fields.Many2one('res.partner', string='Contact Invoice Address', 
                                          readonly=True, required=True, 
                                          states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
