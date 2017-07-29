@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<menuitem action="account.action_payment_term_form"
+		    id="menu_action_payment_term_form_idempiere" parent="connector_idempiere.setting" sequence="40"/>
+		
+		<menuitem action="account.action_tax_form" 
+			id="menu_action_tax_form_idempiere" parent="connector_idempiere.setting" sequence="45"/>
+	</data>
+</odoo>
+            

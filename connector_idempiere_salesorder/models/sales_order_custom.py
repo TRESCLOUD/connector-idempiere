@@ -20,8 +20,37 @@ import traceback
 class sale_order_custom(models.Model):
     _inherit = "sale.order"
 
+    @api.model
+    def _default_delivery_policy(self):
+        """
+        This function load the default delivery policy using the partners default
+        """
+        return self.partner_id.delivery_policy if self.partner_id else False
+
+    delivery_policy_selection = [
+        ('A', 'Availability'),
+        ('F', 'Force'),
+        ('L', 'Complete Line'),
+        ('M', 'Manual'),
+        ('O', 'Complete Order'),
+        ('R', 'After Receipt')]
+
+    # Columns
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
+    
+    # Columns TRESCLOUD
+    delivery_policy = fields.Selection(delivery_policy_selection, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                                       track_visibility='always', default=_default_delivery_policy,
+                                       help='Allow the user select the delivery policy type to be use in sale order')
+    contact_invoice_id = fields.Many2one('res.partner', string='Contact Invoice Address', 
+                                         readonly=True, required=True, 
+                                         states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                         help="Contact Invoice address for current sales order.")
+    contact_shipping_id = fields.Many2one('res.partner', string='Contact Delivery Address', 
+                                          readonly=True, required=True,
+                                          states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                          help="Contact Delivery address for current sales order.")
 
     @api.multi
     def action_confirm(self):
@@ -130,3 +159,31 @@ class sale_order_custom(models.Model):
             traceback.print_exc()
             order.toSchedule(_("Sync Error"))
             return False
+        
+    # TRESCLOUD
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """
+        Update the following fields when the partner is changed:
+        - contact_invoice_id
+        - contact_shipping_id
+        - delivery_policy
+        """
+        
+        super(sale_order_custom, self).onchange_partner_id()
+        if not self.partner_id:
+            self.update({
+                'contact_invoice_id': False,
+                'contact_shipping_id': False,
+                'delivery_policy': False,
+            })
+            return
+
+        addr = self.partner_id.address_get()
+        values = {
+            'contact_invoice_id': addr['contact'],
+            'contact_shipping_id': addr['contact'],
+            'delivery_policy': self.partner_id.delivery_policy if self.partner_id else False,         
+       }
+        self.update(values)

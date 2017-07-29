@@ -3,3 +3,5 @@
 from . import sale_order_synchronizer
 from . import sale_order_setting
 from . import sales_order_custom
+import res_partner_custom
+import account_tax_custom
