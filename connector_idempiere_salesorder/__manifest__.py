@@ -32,6 +32,7 @@
         'views/sale_order_setting.xml',
         'views/sale_order_custom.xml',
         'views/res_partner_custom.xml',
+        'views/account_tax_custom.xml',
         'views/menu.xml'
     ],
     # only loaded in demonstration mode
