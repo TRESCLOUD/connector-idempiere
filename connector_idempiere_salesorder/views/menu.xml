@@ -6,6 +6,12 @@
 		
 		<menuitem action="account.action_tax_form" 
 			id="menu_action_tax_form_idempiere" parent="connector_idempiere.setting" sequence="45"/>
+        
+        <menuitem action="product.product_uom_form_action" 
+        	id="menu_product_uom_form_action_idempiere" parent="connector_idempiere.setting" sequence="50"/>
+
+        <menuitem action="product.product_template_action" 
+        	id="menu_product_template_action_idempiere" parent="connector_idempiere.setting" sequence="55" />
 	</data>
 </odoo>
             
