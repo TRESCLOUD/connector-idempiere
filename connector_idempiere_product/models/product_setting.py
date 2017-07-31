@@ -9,6 +9,13 @@ from idempierewsc.enums import WebServiceResponseStatus
 
 import traceback
 
+#forzamos la codificacion a utf-8
+#util para conversiones a string realizadas en el documento
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
 
 #Configuration class of basic parameters for Products synchronization
 class product_setting(models.Model):

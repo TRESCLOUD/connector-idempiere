@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data noupdate="1">
+
+    	<record id="02" model="idempiere.document.type">
+			<field name="name">UIO Mostrador - Almacen Mostrador</field>
+			<field name="c_doctype_id">1000310</field>
+			<field name="organization">Quito</field>
+			<field name="ad_org_id">1000012</field>
+			<field name="warehouse">Mostrador</field>
+			<field name="m_warehouse_id">1000174</field>
+		</record>
+
+    	<record id="03" model="idempiere.document.type">
+			<field name="name">UIO Mostrador - Almacen Tecnicos</field>
+			<field name="c_doctype_id">1000310</field>
+			<field name="organization">Quito</field>
+			<field name="ad_org_id">1000012</field>
+			<field name="warehouse">Tecnicos</field>
+			<field name="m_warehouse_id">100195</field>
+		</record>
+
+    	<record id="04" model="idempiere.document.type">
+			<field name="name">UIO Orden - Almacen Quito</field>
+			<field name="c_doctype_id">1000309</field>
+			<field name="organization">Quito</field>
+			<field name="ad_org_id">1000012</field>
+			<field name="warehouse">Quito</field>
+			<field name="m_warehouse_id">1000141</field>
+		</record>
+
+    	<record id="05" model="idempiere.document.type">
+			<field name="name">GYE Orden - Almacen Guayaquil</field>
+			<field name="c_doctype_id">1000318</field>
+			<field name="organization">Guayaquil</field>
+			<field name="ad_org_id">1000017</field>
+			<field name="warehouse">Guayaquil</field>
+			<field name="m_warehouse_id">1000142</field>
+		</record>		
+						
+	</data>	
+</odoo>
