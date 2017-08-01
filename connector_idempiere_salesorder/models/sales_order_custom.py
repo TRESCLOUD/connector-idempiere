@@ -14,7 +14,9 @@ from idempierewsc.base import Field
 from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import DocAction
 from idempierewsc.request import SetDocActionRequest
+from datetime import datetime, date, time, timedelta
 import traceback
+
 
 #Class inherited from Sales Order to implement the sending of Sales Orders to iDempiere after being confirmed in Odoo
 class sale_order_custom(models.Model):
@@ -108,14 +110,16 @@ class sale_order_custom(models.Model):
         """
         ws1 = CreateDataRequest()
         ws1.web_service_type = sales_order_setting.idempiere_order_web_service_type
-        ws1.data_row = [Field('C_DocTypeTarget_ID', sales_order_setting.idempiere_c_doctypetarget_id),
-                        Field('AD_Org_ID', sales_order_setting.idempiere_ad_org_id),
+        ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
+                        Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                         Field('C_BPartner_ID', clienteid),
-                        Field('DateOrdered', order.confirmation_date),
-                        Field('M_Warehouse_ID', sales_order_setting.idempiere_m_warehouse_id),
+                        Field('DateOrdered', self.confirmation_date),
+                        Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
                         Field('SalesRep_ID', 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
-                        Field('Description', order.name)]
+                        Field('Description', self.idempiere_sale_description),
+                        Field('DeliveryRule', self.delivery_policy),
+                        Field('DatePromised',self.commitment_date)]
 
         ws2lines = set()
 
@@ -127,6 +131,11 @@ class sale_order_custom(models.Model):
 
             productID = product_setting.getProductID(connection_parameter,line.product_id.default_code)
             if productID >0:
+                daysPromised = 0
+                hoy = date.today()
+                if line.customer_lead:
+                    daysPromised = int(line.customer_lead)
+                datePromisedLine = self.confirmation_date
                 wsline.data_row =([Field('AD_Org_ID', sales_order_setting.idempiere_ad_org_id),
                                 Field('C_Order_ID', '@C_Order.C_Order_ID'),
                                 Field('M_Product_ID', productID),
@@ -135,7 +144,9 @@ class sale_order_custom(models.Model):
                                 Field('PriceList', line.price_unit),
                                 Field('PriceEntered', line.price_unit),
                                 Field('PriceActual', line.price_unit),
-                                Field('Line', line.id)])
+                                Field('Line', line.id),
+                                Field('DatePromised',datePromisedLine),
+                                Field('Discount',line.discount)])
                 ws2lines.add(wsline)
             else:
                 productNotFound = True
