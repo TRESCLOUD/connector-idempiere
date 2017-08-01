@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+	<record id="connector_idempiere_salesorder_account_tax_form" model="ir.ui.view">
+		<field name="name">connector_idempiere_salesorder.account.tax.form</field>
+		<field name="model">account.tax</field>
+		<field name="inherit_id" ref="account.view_tax_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+			    <field name="C_Tax_ID"/>
+			</xpath>
+		</field>
+	</record>
+  </data>
+</odoo>
