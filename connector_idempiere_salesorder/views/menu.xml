@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-		<menuitem action="account.action_payment_term_form"
-		    id="menu_action_payment_term_form_idempiere" parent="connector_idempiere.setting" sequence="40"/>
 		
-		<menuitem action="account.action_tax_form" 
-			id="menu_action_tax_form_idempiere" parent="connector_idempiere.setting" sequence="45"/>
+		<menuitem action="action_idempiere_documents" 
+			id="menu_idempiere_documents" 
+			parent="connector_idempiere.menu_idempiere_setup" 
+			sequence="40"/>
+		
+		<menuitem action="account.action_payment_term_form"
+		    id="menu_action_payment_term_form_idempiere" 
+		    parent="connector_idempiere.menu_idempiere_setup" 
+		    sequence="40"/>
+		
+		<menuitem action="account.action_tax_form"
+			id="menu_action_tax_form_idempiere" 
+			parent="connector_idempiere.menu_idempiere_setup" 
+			sequence="45"/>
         
-        <menuitem action="product.product_uom_form_action" 
-        	id="menu_product_uom_form_action_idempiere" parent="connector_idempiere.setting" sequence="50"/>
+        <menuitem action="product.product_uom_form_action"
+        	id="menu_product_uom_form_action_idempiere" 
+        	parent="connector_idempiere.menu_idempiere_setup" 
+        	sequence="50"/>
 
         <menuitem action="product.product_template_action" 
-        	id="menu_product_template_action_idempiere" parent="connector_idempiere.setting" sequence="55" />
+        	id="menu_product_template_action_idempiere" parent="connector_idempiere.menu_idempiere_setup" sequence="55" />
+
 	</data>
 </odoo>
             
