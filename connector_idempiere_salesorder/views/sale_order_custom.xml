@@ -1,30 +1,24 @@
 <odoo>
   <data>
-	<record id="connector_idempiere_salesorder_sale_order_form" model="ir.ui.view">
-		<field name="name">connector_idempiere_salesorder.sale.order.form</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="sale.view_order_form"/>
-		<field name="arch" type="xml">
-			<xpath expr="//field[@name='payment_term_id']" position="after">
-			    <field name="sync_message"/>
-			    <field name="scheduled"/>
-			</xpath>
-			<xpath expr="//field[@name='partner_id']" position="after">
-			    <field name="delivery_policy"/>
-			    <field name="contact_invoice_id" domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"/>
-			    <field name="contact_shipping_id" domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"/>
-			</xpath>
-		</field>
-	</record>
-	<record id="connector_idempiere_salesorder_sale_order_tree" model="ir.ui.view">
-	    <field name="name">connector_idempiere_salesorder.sale.order.tree</field>
-	    <field name="model">sale.order</field>
-	    <field name="inherit_id" ref="sale.view_quotation_tree"/>
-	    <field name="arch" type="xml">
-	        <xpath expr="//tree/field[@name='state']" position="after">
-	              <field name="scheduled"/>
-	        </xpath>
-	    </field>
-	</record>
+
+  	  <!-- removemos vistas creadas en versiones anteriores -->
+      <delete id="connector_idempiere_salesorder_sale_order_tree" model="ir.ui.view"/>
+      
+      <record id="connector_idempiere_salesorder_sale_order_form" model="ir.ui.view">
+          <field name="name">connector_idempiere_salesorder.sale.order.form</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='payment_term_id']" position="after">                  
+                  <field name="idempiere_document_type_id" options="{'no_create': True,'no_open': True}"/>
+                  <field name="idempiere_sale_description" placeholder="Description for this sale, example: 'Printing equipment sale for project ABC'"/>/>
+              </xpath>
+              <xpath expr="//field[@name='partner_id']" position="after">
+                  <field name="delivery_policy"/>
+                  <field name="contact_invoice_id" domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"/>
+                  <field name="contact_shipping_id" domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"/>
+              </xpath>              
+          </field>
+      </record>
   </data>
 </odoo>

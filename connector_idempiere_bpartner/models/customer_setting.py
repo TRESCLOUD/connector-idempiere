@@ -40,18 +40,22 @@ class customer_setting(models.Model):
         ws.filter= self.idempiere_key_column_name+" = '" +odookey+"'"
         wsc = connection.getWebServiceConnection()
 
-        customerID = 0
+        customerID = 0 #id en la bdd de idempiere
         try:
             response = wsc.send_request(ws)
             wsc.print_xml_request()
             wsc.print_xml_response()
             if response.status == WebServiceResponseStatus.Error:
                 traceback.print_exc()
-            else:
-                for row in response.data_set:
-                    customerID = int(row[0].value)
         except:
             traceback.print_exc()
+
+        #else:
+        for row in response.data_set:
+            for line in row:
+                if line.column == 'C_BPartner_ID':
+                #if line['column'] == 'C_BPartner_ID':
+                    customerID = int(line.value)
 
         return customerID
 

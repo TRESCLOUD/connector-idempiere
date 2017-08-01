@@ -3,10 +3,11 @@
 
     <!-- Top menu item -->
 
-    <menuitem name="Synchronizer" id="connector_idempiere.menu_root"/>
+    <menuitem id="menu_root" name="iDempiere"/>
 
-    <menuitem name="Setting" id="connector_idempiere.setting" parent="connector_idempiere.menu_root"/>
-    -->
+    <menuitem id="setting" name="End Points" parent="menu_root"/>
+    
+    <menuitem id="menu_idempiere_setup" name="Setup" parent="menu_root"/>
 
   </data>
 </odoo>

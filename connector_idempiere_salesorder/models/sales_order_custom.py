@@ -20,6 +20,7 @@ import traceback
 class sale_order_custom(models.Model):
     _inherit = "sale.order"
 
+
     @api.model
     def _default_delivery_policy(self):
         """
@@ -35,11 +36,20 @@ class sale_order_custom(models.Model):
         ('O', 'Complete Order'),
         ('R', 'After Receipt')]
 
-    # Columns
-    scheduled = fields.Boolean('Scheduled for later sync',default=False)
-    sync_message = fields.Char('Sync message',default='')
+    idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
+                                                 string='Document', 
+                                                 required=True, 
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="iDempiere document, automatically sets the organization, warehouse, and other internal parameters", 
+                                                 track_visibility='always')
     
-    # Columns TRESCLOUD
+    idempiere_sale_description = fields.Text(    'Sale Description', 
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="Short description of this sale", 
+                                                 track_visibility='always')
+
     delivery_policy = fields.Selection(delivery_policy_selection, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                        track_visibility='always', default=_default_delivery_policy,
                                        help='Allow the user select the delivery policy type to be use in sale order')
@@ -52,6 +62,10 @@ class sale_order_custom(models.Model):
                                           states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
                                           help="Contact Delivery address for current sales order.")
 
+    #TODO: Implementar estos campos
+    scheduled = fields.Boolean('Scheduled for later sync',default=False)
+    sync_message = fields.Char('Sync message',default='')
+
     @api.multi
     def action_confirm(self):
         """ After confirming a sales order, the synchronization method is triggered.
@@ -60,12 +74,18 @@ class sale_order_custom(models.Model):
         res = super(sale_order_custom, self).action_confirm()
         print ('Synchronizing....')
         synchronizer = sale_order_synchronizer()
-        success = synchronizer.synchronize_to_idempiere(self)
+        idempiere_sale_id = synchronizer.synchronize_to_idempiere(self)
 
-        if success==False:
+        if idempiere_sale_id==False:
             raise UserError(_('Error iDempiere: %s') % self.sync_message)
             message_body = "\n\n".join(self.sync_message)
             self.message_post(body=message_body, subject="Error")
+        
+        #si success retorno el id de la orden de venta en idempiere:
+        for order in self:
+            order.client_order_ref = 'Id en iDempiere *C_Order_ID): ' + idempiere_sale_id
+
+        
 
         return res
 
@@ -144,21 +164,30 @@ class sale_order_custom(models.Model):
 
         wsc = connection_parameter.getWebServiceConnection()
 
-        try:
+        response = wsc.send_request(ws0)
+        wsc.print_xml_request()
+        wsc.print_xml_response()
 
-            response = wsc.send_request(ws0)
-            wsc.print_xml_request()
-            wsc.print_xml_response()
-
-            if response.status == WebServiceResponseStatus.Error:
-                order.toSchedule(_(response.error_message))
-                return False
-            else:
-                return True
-        except:
-            traceback.print_exc()
-            order.toSchedule(_("Sync Error"))
+        if response.status == WebServiceResponseStatus.Error:
+            order.toSchedule(_(response.error_message))
             return False
+        
+        #intentamos obtener el documento origen
+            
+        C_Order_ID = response.responses[0].record_id
+
+        return C_Order_ID
+                
+            
+
+
+
+        
+        #en este sprint no hacemos offline
+        #except:
+        #    traceback.print_exc()
+        #    order.toSchedule(_("Sync Error"))
+        #    return False
         
     # TRESCLOUD
     @api.multi
