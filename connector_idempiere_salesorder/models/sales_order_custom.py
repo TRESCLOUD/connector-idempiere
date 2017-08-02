@@ -15,6 +15,7 @@ from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import DocAction
 from idempierewsc.request import SetDocActionRequest
 from datetime import datetime, date, time, timedelta
+from dateutil import parser
 import traceback
 
 
@@ -125,16 +126,21 @@ class sale_order_custom(models.Model):
         """
         ws1 = CreateDataRequest()
         ws1.web_service_type = sales_order_setting.idempiere_order_web_service_type
+
+        dateOrdered = fields.Datetime.from_string(self.confirmation_date)
+        dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                         Field('C_BPartner_ID', clienteid),
-                        Field('DateOrdered', self.confirmation_date),
+                        Field('DateOrdered', dateOrdered_user),
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
                         Field('SalesRep_ID', 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
                         Field('Description', self.idempiere_sale_description),
                         Field('DeliveryRule', self.delivery_policy),
-                        Field('DatePromised',self.commitment_date)]
+                        Field('DatePromised',fields.Datetime.to_string((fields.Datetime.context_timestamp(self,fields.Datetime.from_string(self.commitment_date))))),
+                        Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
+                        Field('POReference',self.name)]
 
         ws2lines = set()
 
@@ -147,21 +153,20 @@ class sale_order_custom(models.Model):
             productID = product_setting.getProductID(connection_parameter,line.product_id.default_code)
             if productID >0:
                 daysPromised = 0
-                hoy = date.today()
                 if line.customer_lead:
                     daysPromised = int(line.customer_lead)
-                datePromisedLine = self.confirmation_date
+                daysPromised = timedelta(days=daysPromised)
+                datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
                 wsline.data_row =([Field('AD_Org_ID', sales_order_setting.idempiere_ad_org_id),
                                 Field('C_Order_ID', '@C_Order.C_Order_ID'),
                                 Field('M_Product_ID', productID),
                                 Field('QtyEntered', line.product_uom_qty),
                                 Field('QtyOrdered', line.product_uom_qty),
                                 Field('PriceList', line.price_unit),
-                                Field('PriceEntered', line.price_unit),
-                                Field('PriceActual', line.price_unit),
+                                Field('PriceEntered', (line.price_unit-(line.price_unit*line.discount)/100)),
+                                Field('PriceActual', (line.price_unit-(line.price_unit*line.discount)/100)),
                                 Field('Line', line.id),
-                                Field('DatePromised',datePromisedLine),
-                                Field('Discount',line.discount)])
+                                Field('DatePromised',datePromisedLine)])
                 ws2lines.add(wsline)
             else:
                 productNotFound = True
