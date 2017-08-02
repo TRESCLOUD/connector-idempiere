@@ -22,19 +22,12 @@ import traceback
 class sale_order_custom(models.Model):
     _inherit = "sale.order"
 
-    idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
-                                                 string='Document', 
-                                                 required=True, 
-                                                 readonly=True, 
-                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-                                                 help="iDempiere document, automatically sets the organization, warehouse, and other internal parameters", 
-                                                 track_visibility='always')
-    
-    idempiere_sale_description = fields.Text(    'Sale Description', 
-                                                 readonly=True, 
-                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-                                                 help="Short description of this sale", 
-                                                 track_visibility='always')
+    @api.model
+    def _default_delivery_policy(self):
+        """
+        This function load the default delivery policy using the partners default
+        """
+        return self.partner_id.delivery_policy if self.partner_id else 'M'
 
     
     delivery_policy_selection = [
@@ -44,27 +37,49 @@ class sale_order_custom(models.Model):
         ('M', 'Manual'),
         ('O', 'Complete Order'),
         ('R', 'After Receipt')]
-    # Columns
-    @api.model
-    def _default_delivery_policy(self):
-        """
-        This function load the default delivery policy using the partners default
-        """
-        return self.partner_id.delivery_policy if self.partner_id else False
+
+
+    idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
+                                                 string='Document', 
+                                                 required=True, 
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="iDempiere document, automatically sets the organization, warehouse, and other internal parameters", 
+                                                 track_visibility='onchange',)
+    
+    idempiere_sale_description = fields.Text(    'Sale Description', 
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="Short description of this sale", 
+                                                 track_visibility='onchange',)
+
+    delivery_policy = fields.Selection(          delivery_policy_selection, 
+                                                 required=True, 
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                                                 help='Allow the user select the delivery policy type to be use in sale order',
+                                                 track_visibility='onchange', 
+                                                 default=_default_delivery_policy,)
+    
+    contact_invoice_id = fields.Many2one(        'res.partner', 
+                                                 string='Contact Invoice Address', 
+                                                 required=True,
+                                                 readonly=True, 
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="Contact Invoice address for current sales order.",
+                                                 track_visibility='onchange',)
+    
+    contact_shipping_id = fields.Many2one(       'res.partner', string='Contact Delivery Address', 
+                                                 required=True,
+                                                 readonly=True,
+                                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
+                                                 help="Contact Delivery address for current sales order.",
+                                                 track_visibility='onchange',)
+
+    #TODO: Implementar estos campos
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
-    # Columns TRESCLOUD
-    delivery_policy = fields.Selection(delivery_policy_selection, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
-                                       track_visibility='always', default=_default_delivery_policy,
-                                       help='Allow the user select the delivery policy type to be use in sale order')
-    contact_invoice_id = fields.Many2one('res.partner', string='Contact Invoice Address', 
-                                         readonly=True, required=True, 
-                                         states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-                                         help="Contact Invoice address for current sales order.")
-    contact_shipping_id = fields.Many2one('res.partner', string='Contact Delivery Address', 
-                                          readonly=True, required=True,
-                                          states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
-                                          help="Contact Delivery address for current sales order.")
+
 
     @api.multi
     def action_confirm(self):
@@ -186,12 +201,14 @@ class sale_order_custom(models.Model):
         C_Order_ID = response.responses[0].record_id
 
         return C_Order_ID
+
         #en este sprint no hacemos offline
         #except:
         #    traceback.print_exc()
         #    order.toSchedule(_("Sync Error"))
         #    return False
-    # TRESCLOUD
+        
+        
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -201,7 +218,8 @@ class sale_order_custom(models.Model):
         - contact_shipping_id
         - delivery_policy
         """
-        super(sale_order_custom, self).onchange_partner_id()
+
+        res = super(sale_order_custom, self).onchange_partner_id()
         if not self.partner_id:
             self.update({
                 'contact_invoice_id': False,
@@ -210,10 +228,13 @@ class sale_order_custom(models.Model):
             })
             return
 
-        addr = self.partner_id.address_get()
+        addr = self.partner_id.address_get_idempiere(['delivery', 'invoice','contact'])
         values = {
             'contact_invoice_id': addr['contact'],
             'contact_shipping_id': addr['contact'],
-            'delivery_policy': self.partner_id.delivery_policy if self.partner_id else False,         
-       }
+            'partner_invoice_id': addr['invoice'] or addr['delivery'], #usamos cualquier direccion
+            'partner_shipping_id': addr['delivery'] or addr['invoice'], #usamos cualquier direccion
+            'delivery_policy': self.partner_id.delivery_policy if self.partner_id else False,
+            }
         self.update(values)
+        return res

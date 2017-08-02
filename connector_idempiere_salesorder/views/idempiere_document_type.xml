@@ -36,18 +36,12 @@
 		<field name="view_type">form</field>
 		<field name="view_mode">tree,form</field>
 		<field name="view_id" ref="idempiere_document_type_form"/>
-		<!--   
-		<field name="search_view_id" ref="view_authorization_search"/>
-		-->
 	</record>
 	
 	<record id="action_idempiere_documents_tree" model="ir.actions.act_window.view">
     	<field name="sequence" eval="1"/>
         <field name="view_mode">tree</field>
-        <!-- <field name="view_id" ref="view_authorization_third_tree"/>  -->
         <field name="act_window_id" ref="action_idempiere_documents"/>
     </record>
-
-    <menuitem id="menu_idempiere_documents" name="iDempiere Document Types" action="action_idempiere_documents" parent="connector_idempiere.menu_idempiere_setup"/>
 	
 </odoo>
