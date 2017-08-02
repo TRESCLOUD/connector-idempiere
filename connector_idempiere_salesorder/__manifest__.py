@@ -38,7 +38,9 @@
         'views/res_partner_custom.xml',
         'views/account_tax_custom.xml',
         'views/product_custom.xml',
-        'views/menu.xml'
+        'views/menu.xml',
+        'views/idempiere_document_type.xml',
+        'data/idempiere_document_type.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
