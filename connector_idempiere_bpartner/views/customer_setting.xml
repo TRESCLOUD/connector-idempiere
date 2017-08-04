@@ -27,6 +27,8 @@
                     <page string="Read">
                         <group>
                             <field name="read_bpartner_wst"/>
+                            <field name="read_contact_wst"/>
+                            <field name="read_bplocation_wst"/>
                         </group>
                     </page>
                     <page string="Create">

@@ -121,7 +121,7 @@ class sale_order_custom(models.Model):
                 },
         }
 
-    def sendOrder(self,connection_parameter,clienteid,order,product_setting,sales_order_setting):
+    def sendOrder(self,connection_parameter,C_BPartner_ID,order,product_setting,sales_order_setting,customer_setting):
         """Sent from the header and lines of a Sales Order to iDempiere and execution of the action of the complete document.
         """
         ws1 = CreateDataRequest()
@@ -129,9 +129,24 @@ class sale_order_custom(models.Model):
 
         dateOrdered = fields.Datetime.from_string(self.confirmation_date)
         dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
+
+
+        invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
+        if invoiceContact==0:
+            invoiceContact = customer_setting.createContact(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
+        deliveryContact = customer_setting.getContactID(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+        if deliveryContact==0:
+            deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+        invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+        if invoiceAddress == 0:
+            invoiceAddress = customer_setting.createInvoiceAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+        deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
+        if deliveryAddress == 0:
+            deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
-                        Field('C_BPartner_ID', clienteid),
+                        Field('C_BPartner_ID', C_BPartner_ID),
                         Field('DateOrdered', dateOrdered_user),
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
                         Field('SalesRep_ID', 100),
@@ -140,7 +155,11 @@ class sale_order_custom(models.Model):
                         Field('DeliveryRule', self.delivery_policy),
                         Field('DatePromised',fields.Datetime.to_string((fields.Datetime.context_timestamp(self,fields.Datetime.from_string(self.commitment_date))))),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',self.name)]
+                        Field('POReference',self.name),
+                        Field('AD_User_ID',deliveryContact),
+                        Field('Bill_User_ID',invoiceContact),
+                        Field('C_BPartner_Location_ID',deliveryAddress),
+                        Field('Bill_Location_ID',invoiceAddress)]
 
         ws2lines = set()
 

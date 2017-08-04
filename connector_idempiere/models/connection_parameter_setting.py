@@ -2,9 +2,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 from idempierewsc.base import LoginRequest
 from idempierewsc.net import WebServiceConnection
-
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.base import Field
+from idempierewsc.request import QueryDataRequest
+from idempierewsc.enums import WebServiceResponseStatus
+import traceback
 
 # Class responsible for generating the necessary objects for
 # the connection with the webservices of the iDempiere server
@@ -44,3 +49,85 @@ class connection_parameter_setting(models.Model):
         wsc.app_name = 'connector_idempiere'
 
         return wsc
+
+    def getCreateDataRequestWebService(self,webServiceType,fields):
+       """ Get an object of type WebService used to send a CreateDataRequest WebService
+            :param char webServiceType
+            :param Field[] fields
+            :return: (CreateDataRequest) WebService
+        """
+       ws = CreateDataRequest()
+       ws.web_service_type = webServiceType
+       ws.data_row = [fields]
+
+       return ws
+
+    def getQueryDataRequestWebService(self,webServiceType,login,filter,limit):
+       """ Get an object of type WebService used to read data from iDempiere
+            :param char webServiceType
+            :param LoginRequest login
+            :param Char filter
+            :param int limit
+            :return: (QueryDataRequest) WebService
+        """
+       ws = QueryDataRequest()
+       ws.web_service_type = webServiceType
+       ws.offset = 0
+       ws.limit = limit
+       ws.login = login
+       ws.filter= filter
+
+       return ws
+
+    def getRecordID(self,webServiceType,filter,columnKeyName):
+        """ Obtain the idempiere record identifier (C_BPartner_ID) of a customer associated with an odoo sales order
+            :param connection_parameter_setting connection
+            :param Char filter
+            :param Char webServiceType
+            :param Char columnKeyName
+            :return: iDempiere's RercordID
+        """
+
+        ws = self.getQueryDataRequestWebService(webServiceType,self.getLogin(),filter,1)
+        wsc = self.getWebServiceConnection()
+
+        recordID = 0 #id en la bdd de idempiere
+        try:
+            response = wsc.send_request(ws)
+            wsc.print_xml_request()
+            wsc.print_xml_response()
+            if response.status == WebServiceResponseStatus.Error:
+                traceback.print_exc()
+        except:
+            traceback.print_exc()
+
+        #else:
+        for row in response.data_set:
+            for line in row:
+                if line.column == columnKeyName:
+                    recordID = int(line.value)
+
+        return recordID
+
+    def sendRegister(self,webServiceType,fields):
+        """ Send the customer to be registered in idempiere
+            :param connection_parameter_setting connection
+            :param res.partner partner
+            :return: int New iDempiere's RercordID
+        """
+        ws = self.getCreateDataRequestWebService(webServiceType,fields)
+
+        wsc = self.getWebServiceConnection()
+        recordID = 0
+
+        response = wsc.send_request(ws)
+        wsc.print_xml_request()
+        wsc.print_xml_response()
+
+        if response.status == WebServiceResponseStatus.Error:
+            raise UserError(_('Error de conexion %s') % response.error_message)
+
+        if response.status != WebServiceResponseStatus.Error:
+            recordID = int(response.responses[0].record_id)
+
+        return recordID
