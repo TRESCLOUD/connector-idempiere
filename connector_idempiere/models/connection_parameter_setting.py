@@ -58,7 +58,7 @@ class connection_parameter_setting(models.Model):
         """
        ws = CreateDataRequest()
        ws.web_service_type = webServiceType
-       ws.data_row = [fields]
+       ws.data_row = fields
 
        return ws
 
@@ -116,7 +116,7 @@ class connection_parameter_setting(models.Model):
             :return: int New iDempiere's RercordID
         """
         ws = self.getCreateDataRequestWebService(webServiceType,fields)
-
+        ws.login = self.getLogin()
         wsc = self.getWebServiceConnection()
         recordID = 0
 
@@ -128,6 +128,6 @@ class connection_parameter_setting(models.Model):
             raise UserError(_('Error de conexion %s') % response.error_message)
 
         if response.status != WebServiceResponseStatus.Error:
-            recordID = int(response.responses[0].record_id)
+            recordID = int(response.record_id)
 
         return recordID

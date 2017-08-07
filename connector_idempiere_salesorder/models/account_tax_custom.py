@@ -9,5 +9,5 @@ class AccountTax(models.Model):
 
     # Columns
     C_Tax_ID = fields.Integer('ID tax from Idempiere',
-                              required=True,
+                              required=False,
                               help='Store the tax id from Idempiere')

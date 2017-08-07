@@ -15,7 +15,6 @@ from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import DocAction
 from idempierewsc.request import SetDocActionRequest
 from datetime import datetime, date, time, timedelta
-from dateutil import parser
 import traceback
 
 
@@ -121,7 +120,7 @@ class sale_order_custom(models.Model):
                 },
         }
 
-    def sendOrder(self,connection_parameter,C_BPartner_ID,order,product_setting,sales_order_setting,customer_setting):
+    def sendOrder(self,connection_parameter,order,product_setting,sales_order_setting,customer_setting):
         """Sent from the header and lines of a Sales Order to iDempiere and execution of the action of the complete document.
         """
         ws1 = CreateDataRequest()
@@ -130,6 +129,9 @@ class sale_order_custom(models.Model):
         dateOrdered = fields.Datetime.from_string(self.confirmation_date)
         dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
 
+        C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
+        if C_BPartner_ID == 0:
+           C_BPartner_ID =  customer_setting.createBPartner(connection_parameter,order.partner_id)
 
         invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
         if invoiceContact==0:
@@ -142,7 +144,7 @@ class sale_order_custom(models.Model):
             invoiceAddress = customer_setting.createInvoiceAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
         deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
         if deliveryAddress == 0:
-            deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+            deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
 
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
@@ -159,7 +161,8 @@ class sale_order_custom(models.Model):
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
-                        Field('Bill_Location_ID',invoiceAddress)]
+                        Field('Bill_Location_ID',invoiceAddress),
+                        Field('Bill_BPartner_ID',C_BPartner_ID)]
 
         ws2lines = set()
 

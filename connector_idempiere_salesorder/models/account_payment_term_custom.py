@@ -11,6 +11,6 @@ class AccountPaymentTerm(models.Model):
 
         # Columns
     C_PaymentTerm_ID = fields.Integer('ID Payment Term from iDempiere',
-                              required=True,
+                              required=False,
                               default='0',
                               help='The terms of Payment C_PaymentTerm_ID')

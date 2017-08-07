@@ -9,7 +9,7 @@ The Web Services must be published by iDempiere in order to be consumed.
 Steps
 --------
 
-2) Run 2Pack to Create "product_product" view:
+1) Run 2Pack to Create "product_product" view:
 
 - Login to iDempiere with a user with access to Client: System.
 - Open the "Pack In" window.
@@ -18,7 +18,7 @@ Steps
 - Click the "PackIn" button
 - Confirm with the "OK" button.
 
-1) Import Web Services Type
+2) Import Web Services Type
 
 - Login to iDempiere with a Business Group user with read-write access to the "Web Service Security" window.
 - Open the "Web Service Security" window and click the "Import File Loader" button at the toolbar..
@@ -30,7 +30,7 @@ Steps
     - QueryProductTest
     - QueryProduct
 
-2) Run 2Pack to update Web Service parameters that can not be changed through the window of the previous step.
+3) Run 2Pack to update Web Service parameters that can not be changed through the window of the previous step.
 
 - Login to iDempiere with a user with access to Client: System.
 - Open the "Pack In" window.

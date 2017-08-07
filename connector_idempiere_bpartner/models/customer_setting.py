@@ -46,7 +46,9 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        filter = "Name = " + contact.name + " AND C_BPartner_ID = "+c_bpartner_id
+        filter = "Name = '" + str(contact.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsActive = 'Y'"
         AD_User_ID = connection.getRecordID(self.read_contact_wst,filter,'AD_User_ID')
 
         return AD_User_ID
@@ -58,7 +60,9 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        filter = "Name = " + address.name + " AND C_BPartner_ID = "+c_bpartner_id+" AND IsBillTo = 'Y'"
+        filter = "Name = '" + str(address.city)+"-"+str(address.street) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id)+" AND IsBillTo = 'Y'" \
+                 + " AND IsActive = 'Y'"
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
 
         return C_BPartner_Location_ID
@@ -70,7 +74,9 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        filter = "Name = " + address.name + " AND C_BPartner_ID = "+c_bpartner_id+" AND IsShipTo = 'Y'"
+        filter = "Name = '" + str(address.city)+"-"+str(address.street) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id)+" AND IsShipTo = 'Y'" \
+                 + " AND IsActive = 'Y'"
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
 
         return C_BPartner_Location_ID
@@ -149,3 +155,4 @@ class customer_setting(models.Model):
         C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
 
         return C_BPartner_Location_ID
+

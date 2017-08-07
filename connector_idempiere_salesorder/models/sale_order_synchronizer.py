@@ -31,14 +31,7 @@ class sale_order_synchronizer():
             order.toSchedule(_("No Sale Order Setting"))
             return False
 
-        customerID = customer_set.getCustomerID(connection_parameter,order.partner_id)
-        if customerID == 0:
-           customerID =  customer_set.sendCustomer(connection_parameter,order.partner_id)
+        success = order.sendOrder(connection_parameter,order,product_set,saleorder_set,customer_set)
 
-        if (customerID>0):
-            success = order.sendOrder(connection_parameter,customerID,order,product_set,saleorder_set,customer_set)
-        else:
-            order.toSchedule(_("Unsent Customer"))
-            return False
 
         return success
