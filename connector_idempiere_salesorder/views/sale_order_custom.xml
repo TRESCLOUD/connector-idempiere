@@ -62,11 +62,11 @@
               	<xpath expr="//field[@name='partner_id']" position="after">
                   	<field name="contact_invoice_id" 
                   		   domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"
-                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'invoice', 'default_parent_id': partner_id, 'default_customer': True}"
+                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'contact', 'default_parent_id': partner_id, 'default_customer': True}"
                   		   />
                   	<field name="contact_shipping_id" 
                   		   domain="[('type', '=', 'contact'),('parent_id', '=', partner_id)]"
-                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'invoice', 'default_parent_id': partner_id, 'default_customer': True}"
+                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'contact', 'default_parent_id': partner_id, 'default_customer': True}"
                   		   />
               	</xpath>
               	<xpath expr="//field[@name='partner_invoice_id']" position="replace">
@@ -78,7 +78,7 @@
               	<xpath expr="//field[@name='partner_shipping_id']" position="replace">
                   	<field name="partner_shipping_id" 
                   		   domain="[('parent_id', '=' ,partner_id),('type', 'in', ['invoice', 'delivery', 'other'])]"
-                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'invoice', 'default_parent_id': partner_id, 'default_customer': True}"
+                  		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'delivery', 'default_parent_id': partner_id, 'default_customer': True}"
                   		   />
               	</xpath>
           	</field>
