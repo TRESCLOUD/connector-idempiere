@@ -7,3 +7,4 @@ from . import idempiere_document_type
 import res_partner_custom
 import account_tax_custom
 import product_custom
+import account_payment_term_custom

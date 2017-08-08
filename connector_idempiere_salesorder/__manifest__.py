@@ -40,6 +40,7 @@
         'views/product_custom.xml',
         'views/menu.xml',
         'views/idempiere_document_type.xml',
+        'views/account_payment_term.xml',
         'data/idempiere_document_type.xml',
     ],
     # only loaded in demonstration mode
