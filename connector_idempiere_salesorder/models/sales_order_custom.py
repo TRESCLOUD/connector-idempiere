@@ -55,23 +55,23 @@ class sale_order_custom(models.Model):
                                                  track_visibility='onchange',)
 
     delivery_policy = fields.Selection(          delivery_policy_selection, 
-                                                 required=True, 
                                                  readonly=True, 
                                                  states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                                  help='Allow the user select the delivery policy type to be use in sale order',
                                                  track_visibility='onchange', 
                                                  default=_default_delivery_policy,)
+    partner_invoice_id = fields.Many2one(        required=False)
+    
+    partner_shipping_id = fields.Many2one(       required=False)
     
     contact_invoice_id = fields.Many2one(        'res.partner', 
                                                  string='Contact Invoice Address', 
-                                                 required=True,
                                                  readonly=True, 
                                                  states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
                                                  help="Contact Invoice address for current sales order.",
                                                  track_visibility='onchange',)
     
     contact_shipping_id = fields.Many2one(       'res.partner', string='Contact Delivery Address', 
-                                                 required=True,
                                                  readonly=True,
                                                  states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
                                                  help="Contact Delivery address for current sales order.",
