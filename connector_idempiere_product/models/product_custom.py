@@ -2,7 +2,7 @@
 
 from operator import itemgetter
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models,tools, _
 
 #Class inherited from Product Uom
 class ProductUom(models.Model):
@@ -17,5 +17,6 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     # Columns
-    idempiere_id = fields.Integer("ID from iDempiere",
+    #idempiere_id
+    m_product_id = fields.Integer("ID from iDempiere",
                                   help='Show the related ID from iDempiere')

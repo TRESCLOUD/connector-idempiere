@@ -24,12 +24,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','connector_idempiere'],
+    'depends': ['base','connector_idempiere','sale'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'views/product_setting.xml',
+        'views/product_custom.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

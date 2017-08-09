@@ -36,7 +36,6 @@ class customer_setting(models.Model):
         odookey = str(partner[self.odoo_key_column_name])
         filter = self.idempiere_key_column_name+" = '" +odookey+"'"
         customerID = connection.getRecordID(self.read_bpartner_wst,filter,'C_BPartner_ID')
-
         return customerID
 
     def getContactID(self,connection,contact,c_bpartner_id):
@@ -105,9 +104,8 @@ class customer_setting(models.Model):
             :return: int New AD_User_ID
         """
         fields = [Field('Name',  str(contact.name)),
-                  Field('EMail', str(contact.email)),
+                  Field('EMail', str(contact.email or '')),
                   Field('C_BPartner_ID', c_bpartner_id)]
-
         AD_User_ID = connection.sendRegister(self.create_contact_wst,fields)
 
         return AD_User_ID
@@ -122,16 +120,13 @@ class customer_setting(models.Model):
         locationFields = [Field('C_Country_ID', '171'),
                   Field('City', str(address.city)),
                   Field('Address1', str(address.street))]
-
         C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
-
         bpLocationFields= [Field('Name',  str(address.city)+"-"+str(address.street)),
                            Field('C_Location_ID', C_Location_ID),
                            Field('C_BPartner_ID',c_bpartner_id),
                            Field('IsBillTo','Y'),
                            Field('IsShipTo','N')]
         C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
-
         return C_BPartner_Location_ID
 
     def createDeliveryAddress(self,connection,address,c_bpartner_id):

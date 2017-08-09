@@ -132,21 +132,26 @@ class sale_order_custom(models.Model):
         C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
         if C_BPartner_ID == 0:
            C_BPartner_ID =  customer_setting.createBPartner(connection_parameter,order.partner_id)
-
+           self.partner_id.C_Idempiere_ID = C_BPartner_ID 
         invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
         if invoiceContact==0:
             invoiceContact = customer_setting.createContact(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
+            self.contact_invoice_id.C_Idempiere_ID = invoiceContact 
         deliveryContact = customer_setting.getContactID(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
         if deliveryContact==0:
             deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+            self.contact_shipping_id.C_Idempiere_ID = deliveryContact
         invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
         if invoiceAddress == 0:
             invoiceAddress = customer_setting.createInvoiceAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+            self.partner_invoice_id.C_Idempiere_ID = invoiceAddress 
         deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
         if deliveryAddress == 0:
             deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
+            self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
 
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
+                        Field('C_Currency_ID', 100), #TODO Incorporar multimoneda
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                         Field('C_BPartner_ID', C_BPartner_ID),
                         Field('DateOrdered', dateOrdered_user),
@@ -157,12 +162,15 @@ class sale_order_custom(models.Model):
                         Field('DeliveryRule', self.delivery_policy),
                         Field('DatePromised',fields.Datetime.to_string((fields.Datetime.context_timestamp(self,fields.Datetime.from_string(self.commitment_date))))),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',self.name),
+                        Field('POReference',self.name), #TODO Andres corregir el doc origen
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
                         Field('Bill_Location_ID',invoiceAddress),
                         Field('Bill_BPartner_ID',C_BPartner_ID)]
+        idempiere_extra_header_fields = self.idempiere_extra_header_fields()
+        if idempiere_extra_header_fields:
+            ws1.data_row.extend(idempiere_extra_header_fields) 
 
         ws2lines = set()
 
@@ -179,16 +187,18 @@ class sale_order_custom(models.Model):
                     daysPromised = int(line.customer_lead)
                 daysPromised = timedelta(days=daysPromised)
                 datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
-                wsline.data_row =([Field('AD_Org_ID', sales_order_setting.idempiere_ad_org_id),
+                wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                                 Field('C_Order_ID', '@C_Order.C_Order_ID'),
                                 Field('M_Product_ID', productID),
                                 Field('QtyEntered', line.product_uom_qty),
                                 Field('QtyOrdered', line.product_uom_qty),
+                                Field('C_UOM_ID',line.product_uom.c_uom_id),
                                 Field('PriceList', line.price_unit),
-                                Field('PriceEntered', (line.price_unit-(line.price_unit*line.discount)/100)),
+                                Field('PriceEntered', (line.price_unit-(line.price_unit*line.discount)/100)), #TODO Andres corregir redondeo
                                 Field('PriceActual', (line.price_unit-(line.price_unit*line.discount)/100)),
-                                Field('Line', line.id),
-                                Field('DatePromised',datePromisedLine)])
+                                Field('Line', line.sequence),
+                                Field('DatePromised',datePromisedLine),
+                                ])
                 ws2lines.add(wsline)
             else:
                 productNotFound = True
@@ -202,7 +212,6 @@ class sale_order_custom(models.Model):
         #ws3.doc_action = DocAction.Complete
         #ws3.record_id_variable = '@C_Order.C_Order_ID'
         #ws3.record_id = 0
-
         ws0 = CompositeOperationRequest()
         ws0.login = connection_parameter.getLogin()
         ws0.operations.append(Operation(ws1))
@@ -224,9 +233,8 @@ class sale_order_custom(models.Model):
             return False
         
         #intentamos obtener el documento origen
-            
         C_Order_ID = response.responses[0].record_id
-
+        #TODO Almacenar el id de idempiere de la venta creada
         return C_Order_ID
 
         #en este sprint no hacemos offline
@@ -235,6 +243,14 @@ class sale_order_custom(models.Model):
         #    order.toSchedule(_("Sync Error"))
         #    return False
         
+    def idempiere_extra_header_fields(self):
+        """
+        Permite agregar campos adicionales a la cabecera de venta a enviar a idempiere
+        Para ser usado por modulos que heredes de este 
+        """
+        header = []
+        return header
+
         
     @api.multi
     @api.onchange('partner_id')

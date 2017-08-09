@@ -37,7 +37,6 @@
         'data/idempiere_document_type.xml',
         'views/res_partner_custom.xml',
         'views/account_tax_custom.xml',
-        'views/product_custom.xml',
         'views/menu.xml',
         'views/idempiere_document_type.xml',
         'views/account_payment_term.xml',
