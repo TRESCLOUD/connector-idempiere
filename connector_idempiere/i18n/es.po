@@ -1,0 +1,129 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* connector_idempiere
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-08 20:04+0000\n"
+"PO-Revision-Date: 2017-08-08 20:04+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: connector_idempiere
+#: model:ir.ui.menu,name:connector_idempiere.conecction_parameter_setting
+msgid "Connection"
+msgstr "Conexión"
+
+#. module: connector_idempiere
+#: model:ir.actions.act_window,name:connector_idempiere.connector_idempiere_connection_parameter_setting_action_window
+msgid "Connection Parameter Setting window"
+msgstr "Ventana de configuración Parametro Conexión"
+
+#. module: connector_idempiere
+#: model:ir.actions.act_window,help:connector_idempiere.connector_idempiere_connection_parameter_setting_action_window
+msgid "Create the first Connection Parameter Setting"
+msgstr "Crea el primer parámetro de condfiguración de conexión"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: connector_idempiere
+#: model:ir.ui.menu,name:connector_idempiere.setting
+msgid "End Points"
+msgstr "Terminales"
+
+#. module: connector_idempiere
+#: code:addons/connector_idempiere/models/connection_parameter_setting.py:128
+#, python-format
+msgid "Error de conexion %s"
+msgstr "Error de conexión %s"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. modules: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: connector_idempiere
+#: model:ir.ui.view,arch_db:connector_idempiere.connector_idempiere_connection_parameter_setting_form
+msgid "iDempiere Connection Setting"
+msgstr "iDempiere Característica de Conexión"
+
+#. module: connector_idempiere
+#: model:ir.ui.menu,name:connector_idempiere.menu_root
+msgid "iDempiere"
+msgstr "iDempiere"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_login_client_id
+msgid "iDempiere AD_Client_ID"
+msgstr "iDempiere AD_Client_ID"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_login_org_id
+msgid "iDempiere AD_Orge_ID"
+msgstr "iDempiere AD_Orge_ID"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_login_role_id
+msgid "iDempiere AD_Role_ID"
+msgstr "iDempiere AD_Role_ID"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_login_user
+msgid "iDempiere AD_User_ID"
+msgstr "iDempiere AD_User_ID"
+
+#. module: connector_idempiere
+#: model:ir.ui.menu,name:connector_idempiere.menu_idempiere_setup
+msgid "Setup"
+msgstr "Preparación"
+
+#. module: connector_idempiere
+#: model:ir.model,name:connector_idempiere.model_connector_idempiere_connection_parameter_setting
+msgid "connector_idempiere.connection_parameter_setting"
+msgstr "connector_idempiere.connection_parameter_setting"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_login_password
+msgid "iDempiere Password"
+msgstr "Contraseña iDempiere"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_url
+msgid "iDempiere URL"
+msgstr "iDempiere URL"
+
+#. module: connector_idempiere
+#: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_idempiere_urls
+msgid "iDempiere URLs"
+msgstr "iDempiere URLs"
+
+
