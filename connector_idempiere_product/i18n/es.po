@@ -1,0 +1,159 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* connector_idempiere_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-08 20:04+0000\n"
+"PO-Revision-Date: 2017-08-08 20:04+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. modules: connector_idempiere_product
+#: code:addons/connector_idempiere_product/models/product_setting.py
+#: code:addons/connector_idempiere_product/models/product_setting.py
+#, python-format
+msgid "Alert"
+msgstr "Alerta"
+
+#. module: connector_idempiere_product
+#: model:ir.actions.act_window,help:connector_idempiere_product.connector_idempiere_product_product_setting_action_window
+msgid "Create the first Product Setting"
+msgstr "Create la Primera Configuración de Producto"
+
+#. module: connector_idempiere_product
+#: code:addons/connector_idempiere_product/models/product_setting.py:134
+#, python-format
+msgid "Created Products : , Updated Products: "
+msgstr "Productos Creados : , Productos Actualizados: "
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. modules: connector_idempiere_product, connector_idempiere_salesorder
+#: code:addons/connector_idempiere_product/models/product_setting.py:100
+#: code:addons/connector_idempiere_salesorder/models/sales_order_custom.py:117
+#, python-format
+msgid "Error iDempiere: %s"
+msgstr "Error iDempiere: %s"
+
+#. module: connector_idempiere_product
+#: model:ir.ui.view,arch_db:connector_idempiere_product.connector_idempiere_product_product_setting_form
+msgid "Get"
+msgstr "Get"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_limit
+msgid "Limit"
+msgstr "Límite"
+
+#. modules: connector_idempiere_product
+#: code:addons/connector_idempiere_product/models/product_setting.py:84
+#, python-format
+msgid "No Connection Setting"
+msgstr "Sin configuración de conexión"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_odoo_key_column_name
+msgid "Odoo Key Column Name"
+msgstr "Columna Clave de Odoo"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,help:connector_idempiere_product.field_connector_idempiere_product_product_setting_read_product_wst
+msgid "Only Read a register, not create or update data"
+msgstr "Solo lee un registro, no crea o actualiza datos"
+
+#. module: connector_idempiere_product
+#: model:ir.ui.menu,name:connector_idempiere_product.product_setting
+msgid "Product"
+msgstr "Producto"
+
+#. module: connector_idempiere_product
+#: model:ir.actions.act_window,name:connector_idempiere_product.connector_idempiere_product_product_setting_action_window
+msgid "Product Setting window"
+msgstr "Product Setting window"
+
+#. modules: connector_idempiere_bpartner, connector_idempiere_product
+#: model:ir.ui.view,arch_db:connector_idempiere_bpartner.connector_idempiere_bpartner_setting_form
+#: model:ir.ui.view,arch_db:connector_idempiere_product.connector_idempiere_product_product_setting_form
+msgid "Read"
+msgstr "Lectura"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_result
+msgid "Result"
+msgstr "Resultado"
+
+#. module: connector_idempiere_product
+#: model:ir.ui.view,arch_db:connector_idempiere_product.connector_idempiere_product_product_setting_form
+msgid "Update Product"
+msgstr "Producto Actualizado"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_read_product_wst
+msgid "WST Read a Product"
+msgstr "WST Lee un Producto"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_get_product_wst
+msgid "WST get Products"
+msgstr "WST obtener Productos"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,help:connector_idempiere_product.field_connector_idempiere_product_product_setting_get_product_wst
+msgid "Web Service Type for get a list of Products and register in odoo"
+msgstr "Tipo de Servicio Web para obtener una lista de Productos y registrar en odoo"
+
+#. module: connector_idempiere_product
+#: model:ir.model,name:connector_idempiere_product.model_connector_idempiere_product_product_setting
+msgid "connector_idempiere_product.product_setting"
+msgstr "connector_idempiere_product.product_setting"
+
+#. modules: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_idempiere_key_column_name
+msgid "iDempiere Key Column Name"
+msgstr "Columna Clave iDempiere"
+
+#. module: connector_idempiere_product
+#: model:ir.ui.view,arch_db:connector_idempiere_product.connector_idempiere_product_product_setting_form
+msgid "iDempiere Product Setting"
+msgstr "Configuración de Producto iDempiere"
+
+#. module: connector_idempiere_product
+#: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_idempiere_filter
+msgid "iDempiere WebService Filter"
+msgstr "iDempiere Filtro Servicio Web"
+

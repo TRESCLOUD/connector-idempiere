@@ -84,7 +84,17 @@ class sale_order_custom(models.Model):
     #TODO: Implementar estos campos
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
-
+    
+    @api.multi
+    def open_page(self):
+        connector_idempiere = self.env['connector_idempiere.connection_parameter_setting'].search([],limit=1)
+        url = connector_idempiere.idempiere_url + '/?Action=Zoom&TableName=C_Order&C_Order_ID=' \
+        + ((self.client_order_ref and self.client_order_ref[:30]) or '')
+        return {
+                "type": "ir.actions.act_url",
+                "url": url,
+                "target": "new",
+                }
 
     @api.multi
     def action_confirm(self):
@@ -92,6 +102,19 @@ class sale_order_custom(models.Model):
         """
         self.ensure_one()
         res = super(sale_order_custom, self).action_confirm()
+
+        __FIELDS_REQUIRED = ['idempiere_document_type_id', 'delivery_policy',
+                             'contact_invoice_id', 'contact_shipping_id',
+                             'partner_invoice_id','partner_shipping_id']
+        error_fields = []
+        for field in __FIELDS_REQUIRED:
+            if not self[field]:
+                error_fields.append(self.fields_get([field], ['string'])[field]['string'])
+                
+        if error_fields:
+            raise UserError(_(u'Error: \n\nLos siguientes campos no han están llenados, '
+                              u'por favor elegir los datos de esos campos para '
+                              u'continuar con la venta: \n- %s') % '\n- '.join(error_fields))
         print ('Synchronizing....')
         synchronizer = sale_order_synchronizer()
         idempiere_sale_id = synchronizer.synchronize_to_idempiere(self)
