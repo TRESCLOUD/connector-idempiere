@@ -6,12 +6,14 @@ from odoo.exceptions import UserError
 from idempierewsc.request import QueryDataRequest
 from idempierewsc.net import WebServiceConnection
 from idempierewsc.enums import WebServiceResponseStatus
-
+import time
+import datetime
 import traceback
 
 #forzamos la codificacion a utf-8
 #util para conversiones a string realizadas en el documento
 import sys
+from mx.DateTime.DateTime import today
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -75,7 +77,10 @@ class product_setting(models.Model):
         """ Create or Update odoo products from idempiere product Through webservice with idempiere_filter applied
         """
         created_count = 0
-        updated_count = 0
+        updated_products_ids = []
+
+        start_time = time.time()
+
         connection_parameter = self.env['connector_idempiere.connection_parameter_setting'].search([('idempiere_login_client_id', '>', '0')], limit=1)
         if connection_parameter.id==False:
             return {
@@ -98,40 +103,48 @@ class product_setting(models.Model):
         wsc.print_xml_response()
         if response.status == WebServiceResponseStatus.Error:
             raise UserError(_('Error iDempiere: %s') % response.error_message)
-            #traceback.print_exc()
-        else:
-            for row in response.data_set:
-                values = {}
-                for field in row:
-                    column = str(field.column).lower()
-
-                    if str(column)==self.odoo_key_column_name:
-                        value = str(field.value)
-                    if str(column)=='category_name':
-                        column = 'categ_id'
-                        field.value = self.getCateg_id(str(field.value))
-                    values[column] = field.value
-
-                product = self.get_odoo_product(value)
-
-                if not product:
-                    product = self.env['product.product'].create(values)
-                    created_count = created_count + 1
-                else:
-                    product.name = values['name']
-                    product.list_price = values['list_price']
-                    product.categ_id = values['categ_id']
-                    updated_count = updated_count + 1
-
-            message= "Created Products : " + str(created_count) + ", Updated Products: "+  str(updated_count)
-            print message
-            self.result = message
-
-
+        old_products_from_idempiere = self.env['product.product'].search([('m_product_id', '>', 0)]) #los productos de idempiere tienen el id guardado aqui
+        old_products_from_idempiere_ids = old_products_from_idempiere.mapped('id')
+        for row in response.data_set:
+            values = {}
+            for field in row:
+                column = str(field.column).lower()
+                if str(column)==self.odoo_key_column_name:
+                    key = str(field.value)
+                if str(column)=='category_name':
+                    column = 'categ_id'
+                    field.value = self.getCateg_id(str(field.value)) #TODO: Agregar el id de la categoria a Odoo para no buscar por nombre
+                if str(column)=='c_uom_id': #mapeamos el id de unidad de medida de idempiere al id de Odoo
+                    uom = self.env['product.uom'].search([['c_uom_id', '=', field.value], ['active', '=', True]])
+                    if not uom:
+                        raise UserError(_('Error iDempiere: En Odoo debe configurar una unidad de medida equivalente a idempiere, con c_uom_id =%s') % str(field.value))
+                        column = 'uom_id'
+                        field.value = uom.id
+                values[column] = field.value
+            values['active'] = True #los productos importados de idempiere son activos (la vista product_product ya considera esto)
+            product = self.get_odoo_product(key)
+            if not product:
+                product = self.env['product.product'].create(values)
+                created_count = created_count + 1
+            else:
+                product.write(values)
+                updated_products_ids.append(product.id)
+        #productso deprecados
+        deprecated_product_ids = [item for item in old_products_from_idempiere_ids if item not in updated_products_ids] 
+        deprecated_products = self.env['product.product'].search([('id', 'in', deprecated_product_ids)])
+        deprecated_products.write({'active': False})
+        end_time = time.time()
+        message= "Last Processing Date: " + str(datetime.datetime.now()) + " UTC"\
+                 "\nCreated Products: " + str(created_count) + \
+                 "\nUpdated Products: "+  str(len(updated_products_ids)) + \
+                 "\nDeprecated Products: "+  str(len(deprecated_product_ids)) + \
+                 "\nElapsed Time: " + str(round(end_time - start_time,2)) + " segundos"
+        print message #TODO Cambiar por log
+        self.result = message
         return {
                 "warning":{
                 "title": _("Alert"),
-                "message": _("Created Products : " + str(created_count) + ", Updated Products: "+  str(updated_count)),
+                "message": message,
                 },
             }
 
@@ -143,6 +156,4 @@ class product_setting(models.Model):
         catetory = self.env['product.category'].search([("name", "=", str(category_name))], limit=1)
         if catetory:
             return catetory.id
-            print str(catetory.id)
-        print str(category_name)
-        return 1
+        return False

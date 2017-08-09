@@ -30,8 +30,5 @@ class sale_order_synchronizer():
         if saleorder_set.id==False:
             order.toSchedule(_("No Sale Order Setting"))
             return False
-
         success = order.sendOrder(connection_parameter,order,product_set,saleorder_set,customer_set)
-
-
         return success
