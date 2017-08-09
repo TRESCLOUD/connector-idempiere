@@ -84,6 +84,10 @@
                   		   context="{'form_view_ref': 'connector_idempiere_salesorder.partner_contact_or_address_form', 'default_type':'delivery', 'default_parent_id': partner_id, 'default_customer': True}"
                   		   />
               	</xpath>
+              	<xpath expr="//field[@name='client_order_ref']" position="after">
+                  	<field name="c_order_id"/>
+              	</xpath>              	
+              	
           	</field>
       	</record>
   	</data>

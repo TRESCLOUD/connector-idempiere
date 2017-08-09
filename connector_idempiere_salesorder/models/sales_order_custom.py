@@ -39,6 +39,7 @@ class sale_order_custom(models.Model):
         ('R', 'After Receipt')]
 
 
+    #columns
     idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
                                                  string='Document', 
                                                  required=True, 
@@ -76,6 +77,10 @@ class sale_order_custom(models.Model):
                                                  help="Contact Delivery address for current sales order.",
                                                  track_visibility='onchange',)
 
+    c_order_id = fields.Integer(                 "ID from iDempiere",
+                                                 readonly=True,
+                                                 help='Show the related ID from iDempiere',
+                                                 track_visibility='onchange',)
     #TODO: Implementar estos campos
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
@@ -97,9 +102,6 @@ class sale_order_custom(models.Model):
         """
         self.ensure_one()
         res = super(sale_order_custom, self).action_confirm()
-        print ('Synchronizing....')
-        synchronizer = sale_order_synchronizer()
-        idempiere_sale_id = synchronizer.synchronize_to_idempiere(self)
 
         __FIELDS_REQUIRED = ['idempiere_document_type_id', 'delivery_policy',
                              'contact_invoice_id', 'contact_shipping_id',
@@ -113,15 +115,16 @@ class sale_order_custom(models.Model):
             raise UserError(_(u'Error: \n\nLos siguientes campos no han están llenados, '
                               u'por favor elegir los datos de esos campos para '
                               u'continuar con la venta: \n- %s') % '\n- '.join(error_fields))
+        print ('Synchronizing....')
+        synchronizer = sale_order_synchronizer()
+        idempiere_sale_id = synchronizer.synchronize_to_idempiere(self)
         if idempiere_sale_id==False:
             raise UserError(_('Error iDempiere: %s') % self.sync_message)
             message_body = "\n\n".join(self.sync_message)
-            self.message_post(body=message_body, subject="Error")
-        
+            self.message_post(body=message_body, subject="Error")        
         #si success retorno el id de la orden de venta en idempiere:
         for order in self:
-            order.client_order_ref = 'Id en iDempiere *C_Order_ID): ' + idempiere_sale_id
-
+            order.c_order_id = idempiere_sale_id
         return res
 
     def toSchedule(self,message):
@@ -182,7 +185,7 @@ class sale_order_custom(models.Model):
                         Field('DeliveryRule', self.delivery_policy),
                         Field('DatePromised',fields.Datetime.to_string((fields.Datetime.context_timestamp(self,fields.Datetime.from_string(self.commitment_date))))),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',self.name), #TODO Andres corregir el doc origen
+                        Field('POReference',"-".join([self.name,self.client_order_ref])), #TODO Andres corregir el doc origen
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
@@ -213,12 +216,17 @@ class sale_order_custom(models.Model):
                                 Field('QtyEntered', line.product_uom_qty),
                                 Field('QtyOrdered', line.product_uom_qty),
                                 Field('C_UOM_ID',line.product_uom.c_uom_id),
+                                Field('PriceEntered', line.price_unit),
                                 Field('PriceList', line.price_unit),
-                                Field('PriceEntered', (line.price_unit-(line.price_unit*line.discount)/100)), #TODO Andres corregir redondeo
-                                Field('PriceActual', (line.price_unit-(line.price_unit*line.discount)/100)),
+                                #price_reduce #(line.price_unit-(line.price_unit*line.discount)/100)), #TODO Andres corregir redondeo
+                                #Field('PriceActual', (line.price_unit-(line.price_unit*line.discount)/100)), este campo es funcional no se requiere
                                 Field('Line', line.sequence),
-                                Field('DatePromised',datePromisedLine),
+                                Field('DatePromised',datePromisedLine)
                                 ])
+                                
+                idempiere_extra_line_fields = order.order_line.idempiere_extra_line_fields()
+                if idempiere_extra_line_fields:
+                    wsline.data_row.extend(idempiere_extra_line_fields)
                 ws2lines.add(wsline)
             else:
                 productNotFound = True
@@ -263,15 +271,15 @@ class sale_order_custom(models.Model):
         #    order.toSchedule(_("Sync Error"))
         #    return False
         
+    @api.multi
     def idempiere_extra_header_fields(self):
         """
         Permite agregar campos adicionales a la cabecera de venta a enviar a idempiere
-        Para ser usado por modulos que heredes de este 
+        Para ser usado por modulos que hereden de este 
         """
         header = []
         return header
-
-        
+            
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -301,3 +309,20 @@ class sale_order_custom(models.Model):
             }
         self.update(values)
         return res
+
+
+
+class SaleOrderLine(models.Model):
+    '''
+    Heredando de la clase sale_order line
+    '''
+    _inherit = 'sale.order.line'
+
+    @api.multi
+    def idempiere_extra_line_fields(self):
+        """
+        Permite agregar campos adicionales a la linea de venta a enviar a idempiere
+        Para ser usado por modulos que hereden de este 
+        """
+        line = []
+        return line
