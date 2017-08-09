@@ -57,7 +57,11 @@
 	                	options="{'no_create': True,'no_open': True}"/>
 	                <field name="delivery_policy" attrs="{'required': 0}"/>
 	                <field name="idempiere_sale_description" placeholder="Description for this sale, example: 'Printing equipment sale for project ABC'"/>/>
-	                <button col="2" name="open_page" type="object" string="Abrir en Idempiere" class="oe_stat_button"/>
+	                <button col="2" name="open_page" 
+	                		type="object" 
+	                		string="Ver en iDempiere"
+	                		attrs="{'invisible': [('c_order_id','=', 0)]}" 
+	                		class="oe_stat_button"/>
 	            </xpath>              
               	<xpath expr="//field[@name='partner_id']" position="attributes">
               		<attribute name = "domain">"[('customer','=',True),('parent_id','=',False)]"</attribute>
