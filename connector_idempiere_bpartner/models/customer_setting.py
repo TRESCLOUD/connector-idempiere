@@ -106,6 +106,9 @@ class customer_setting(models.Model):
         fields = [Field('Name',  str(contact.name)),
                   Field('EMail', str(contact.email or '')),
                   Field('C_BPartner_ID', c_bpartner_id)]
+        #fields.append(Field('Title', str(contact.function))
+        #a = 1 if contact.function
+                      
         AD_User_ID = connection.sendRegister(self.create_contact_wst,fields)
 
         return AD_User_ID

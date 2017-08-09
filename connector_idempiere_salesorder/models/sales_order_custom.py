@@ -19,7 +19,7 @@ import traceback
 
 
 #Class inherited from Sales Order to implement the sending of Sales Orders to iDempiere after being confirmed in Odoo
-class sale_order_custom(models.Model):
+class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.model
@@ -37,7 +37,6 @@ class sale_order_custom(models.Model):
         ('M', 'Manual'),
         ('O', 'Complete Order'),
         ('R', 'After Receipt')]
-
 
     #columns
     idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
@@ -79,6 +78,7 @@ class sale_order_custom(models.Model):
 
     c_order_id = fields.Integer(                 "ID from iDempiere",
                                                  readonly=True,
+                                                 copy=False,
                                                  help='Show the related ID from iDempiere',
                                                  track_visibility='onchange',)
     #TODO: Implementar estos campos
@@ -88,31 +88,42 @@ class sale_order_custom(models.Model):
     @api.multi
     def open_page(self):
         connector_idempiere = self.env['connector_idempiere.connection_parameter_setting'].search([],limit=1)
-        url = connector_idempiere.idempiere_url + '/?Action=Zoom&TableName=C_Order&C_Order_ID=' \
-        + ((self.client_order_ref and self.client_order_ref[:30]) or '')
+        if not self.c_order_id:
+            return {
+                    "type": "ir.actions.act_url",
+                    "url": "#",
+                    }
+        url = connector_idempiere.idempiere_url + '/webui/?Action=Zoom&TableName=C_Order&Record_ID=' + str(self.c_order_id)
         return {
                 "type": "ir.actions.act_url",
                 "url": url,
                 "target": "new",
                 }
 
+
+    @api.multi
+    def get_fields_required_idempiere(self):
+        """ list 'not required' field of required fields to validate before sending to idempiere
+        """
+        __FIELDS_REQUIRED_IDEMPIERE = ['idempiere_document_type_id', 'delivery_policy',
+                         'contact_invoice_id', 'contact_shipping_id',
+                         'partner_invoice_id','partner_shipping_id']
+        return __FIELDS_REQUIRED_IDEMPIERE 
+    
     @api.multi
     def action_confirm(self):
         """ After confirming a sales order, the synchronization method is triggered.
         """
         self.ensure_one()
-        res = super(sale_order_custom, self).action_confirm()
+        res = super(SaleOrder, self).action_confirm()
 
-        __FIELDS_REQUIRED = ['idempiere_document_type_id', 'delivery_policy',
-                             'contact_invoice_id', 'contact_shipping_id',
-                             'partner_invoice_id','partner_shipping_id']
         error_fields = []
-        for field in __FIELDS_REQUIRED:
+        for field in self.get_fields_required_idempiere():
             if not self[field]:
                 error_fields.append(self.fields_get([field], ['string'])[field]['string'])
                 
         if error_fields:
-            raise UserError(_(u'Error: \n\nLos siguientes campos no han están llenados, '
+            raise UserError(_(u'Error: \n\nLos siguientes campos no están llenados, '
                               u'por favor elegir los datos de esos campos para '
                               u'continuar con la venta: \n- %s') % '\n- '.join(error_fields))
         print ('Synchronizing....')
@@ -151,6 +162,8 @@ class sale_order_custom(models.Model):
 
         dateOrdered = fields.Datetime.from_string(self.confirmation_date)
         dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
+        datePromised = fields.Datetime.from_string(self.commitment_date)
+        datePromised_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,datePromised)))
 
         C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
         if C_BPartner_ID == 0:
@@ -172,7 +185,9 @@ class sale_order_custom(models.Model):
         if deliveryAddress == 0:
             deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
             self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
-
+        customer_reference = self.name
+        if self.client_order_ref:
+            customer_reference += "-"+self.client_order_ref 
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
                         Field('C_Currency_ID', 100), #TODO Incorporar multimoneda
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
@@ -183,9 +198,9 @@ class sale_order_custom(models.Model):
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
                         Field('Description', self.idempiere_sale_description),
                         Field('DeliveryRule', self.delivery_policy),
-                        Field('DatePromised',fields.Datetime.to_string((fields.Datetime.context_timestamp(self,fields.Datetime.from_string(self.commitment_date))))),
+                        Field('DatePromised',datePromised_user),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',"-".join([self.name,self.client_order_ref])), #TODO Andres corregir el doc origen
+                        Field('POReference',customer_reference),
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
@@ -216,14 +231,15 @@ class sale_order_custom(models.Model):
                                 Field('QtyEntered', line.product_uom_qty),
                                 Field('QtyOrdered', line.product_uom_qty),
                                 Field('C_UOM_ID',line.product_uom.c_uom_id),
-                                Field('PriceEntered', line.price_unit),
+                                Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
                                 Field('PriceList', line.price_unit),
-                                #price_reduce #(line.price_unit-(line.price_unit*line.discount)/100)), #TODO Andres corregir redondeo
-                                #Field('PriceActual', (line.price_unit-(line.price_unit*line.discount)/100)), este campo es funcional no se requiere
+                                Field('PriceActual', line.price_unit),
+                                #Field('Discount', 0.0), #0% para el caso de uso
+                                #Field('LineNetAmt',line.price_subtotal),
                                 Field('Line', line.sequence),
+                                Field('Description', line.name),
                                 Field('DatePromised',datePromisedLine)
                                 ])
-                                
                 idempiere_extra_line_fields = order.order_line.idempiere_extra_line_fields()
                 if idempiere_extra_line_fields:
                     wsline.data_row.extend(idempiere_extra_line_fields)
@@ -290,7 +306,7 @@ class sale_order_custom(models.Model):
         - delivery_policy
         """
 
-        res = super(sale_order_custom, self).onchange_partner_id()
+        res = super(SaleOrder, self).onchange_partner_id()
         if not self.partner_id:
             self.update({
                 'contact_invoice_id': False,
