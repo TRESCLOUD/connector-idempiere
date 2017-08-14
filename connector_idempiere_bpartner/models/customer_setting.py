@@ -60,17 +60,11 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        #si la calle1, calle2, y la ciudad coinciden
-        #TODO ANDRES
-        #SOn dos tablas... a cual hay que afectar! replicar en getDeliveryAddressID
-        filter = "Name = '" + str(address.name or '') \
-                 + "' AND Address1 = '" + str(address.street or '') \
-                 + "' AND City = '" + str(address.city) \
-                 + "' AND C_BPartner_ID = "+str(c_bpartner_id)+" AND IsBillTo = 'Y'" \
+        filter = "Name = '" + str(address.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsBillTo = 'Y'" \
                  + " AND IsActive = 'Y'"
-
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
-
         return C_BPartner_Location_ID
 
     def getDeliveryAddressID(self,connection,address,c_bpartner_id):
@@ -80,8 +74,9 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        filter = "Name = '" + str(address.city)+"-"+str(address.street) \
-                 + "' AND C_BPartner_ID = "+str(c_bpartner_id)+" AND IsShipTo = 'Y'" \
+        filter = "Name = '" + str(address.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsShipTo = 'Y'" \
                  + " AND IsActive = 'Y'"
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
 
@@ -97,8 +92,10 @@ class customer_setting(models.Model):
         #WebService to create the customer
         fields = [Field('Name',  str(partner.name)),
                   Field('Value', str(partner.vat)),
-                  Field('TaxID', str(partner.vat))]
-
+                  Field('TaxID', str(partner.vat)),
+                  Field('C_BP_Group_ID', str(partner.partner_category_id.c_bp_group_id)), 
+                  Field('SalesRep_ID', str(partner.user_id.ad_user_id)),
+                  ]
         C_BPartner_ID = connection.sendRegister(self.create_bpartner_wst,fields)
 
         return C_BPartner_ID
@@ -111,53 +108,39 @@ class customer_setting(models.Model):
             :return: int New AD_User_ID
         """
         fields = [Field('Name',  str(contact.name)),
+                  Field('Description', str(contact.function or '')),
                   Field('EMail', str(contact.email or '')),
-                  Field('C_BPartner_ID', c_bpartner_id)]
-        #fields.append(Field('Title', str(contact.function))
-        #a = 1 if contact.function
-                      
+                  Field('Phone', str(contact.phone or '')),
+                  Field('Phone2', str(contact.mobile or '')),
+                  Field('Comments', str(contact.comment or '')),
+                  Field('C_BPartner_ID', c_bpartner_id),
+                  ]                      
         AD_User_ID = connection.sendRegister(self.create_contact_wst,fields)
 
         return AD_User_ID
 
-    def createInvoiceAddress(self,connection,address,c_bpartner_id):
+    def createAddress(self,connection,address,c_bpartner_id):
         """ Send the customer's Invoice Address to be registered in idempiere
             :param connection_parameter_setting connection
             :param res.partner address
             :param int c_bpartner_id
             :return: int New C_BPartner_Location_ID
         """
-        locationFields = [Field('C_Country_ID', '171'),
-                  Field('City', str(address.city)),
-                  Field('Address1', str(address.street))]
+        #en idempiere una direccion se crea en dos tablas
+        locationFields = [
+                  Field('Address1', str(address.street or '')),
+                  Field('Address2', str(address.street2 or '')),
+                  Field('City', str(address.city or '')),
+                  Field('Postal', str(address.zip or '')),
+                  Field('C_City_ID', str(address.city_id.C_City_ID)),
+                  Field('C_Region_ID', str(address.state_id.C_Region_ID)),
+                  Field('C_Country_ID', str(address.country_id.C_Country_ID)),
+                  ]
         C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
-        bpLocationFields= [Field('Name',  str(address.city)+"-"+str(address.street)),
+        bpLocationFields= [Field('Name',  str(address.name)),
                            Field('C_Location_ID', C_Location_ID),
                            Field('C_BPartner_ID',c_bpartner_id),
-                           Field('IsBillTo','Y'),
-                           Field('IsShipTo','N')]
-        C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
-        return C_BPartner_Location_ID
-
-    def createDeliveryAddress(self,connection,address,c_bpartner_id):
-        """ Send the customer's Delivery Address to be registered in idempiere
-            :param connection_parameter_setting connection
-            :param res.partner address
-            :param int c_bpartner_id
-            :return: int New C_BPartner_Location_ID
-        """
-        locationFields = [Field('C_Country_ID', '171'),
-                  Field('City', str(address.city)),
-                  Field('Address1', str(address.street))]
-
-        C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
-
-        bpLocationFields= [Field('Name',  str(address.city)+"-"+str(address.street)),
-                           Field('C_Location_ID', C_Location_ID),
-                           Field('C_BPartner_ID',c_bpartner_id),
-                           Field('IsBillTo','N'),
+                           Field('IsBillTo','Y'), #Ambobs en Y porque Odoo no diferencia
                            Field('IsShipTo','Y')]
         C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
-
         return C_BPartner_Location_ID
-
