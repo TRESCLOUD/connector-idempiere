@@ -33,6 +33,7 @@ class customer_setting(models.Model):
             :param res.partner partner
             :return: iDempiere's C_BPartner_ID of Customer
         """
+        #para el partner usamos la cedula/ruc o el codigo parametrizado
         odookey = str(partner[self.odoo_key_column_name])
         filter = self.idempiere_key_column_name+" = '" +odookey+"'"
         customerID = connection.getRecordID(self.read_bpartner_wst,filter,'C_BPartner_ID')
@@ -45,11 +46,11 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
+        #si el nombre coincide exactamente, y si el parent_id apunta al al mismo.
         filter = "Name = '" + str(contact.name) \
                  + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
                  + " AND IsActive = 'Y'"
         AD_User_ID = connection.getRecordID(self.read_contact_wst,filter,'AD_User_ID')
-
         return AD_User_ID
 
     def getInvoiceAddressID(self,connection,address,c_bpartner_id):
@@ -59,9 +60,15 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: iDempiere's AD_User_ID of Contact
         """
-        filter = "Name = '" + str(address.city)+"-"+str(address.street) \
+        #si la calle1, calle2, y la ciudad coinciden
+        #TODO ANDRES
+        #SOn dos tablas... a cual hay que afectar! replicar en getDeliveryAddressID
+        filter = "Name = '" + str(address.name or '') \
+                 + "' AND Address1 = '" + str(address.street or '') \
+                 + "' AND City = '" + str(address.city) \
                  + "' AND C_BPartner_ID = "+str(c_bpartner_id)+" AND IsBillTo = 'Y'" \
                  + " AND IsActive = 'Y'"
+
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
 
         return C_BPartner_Location_ID

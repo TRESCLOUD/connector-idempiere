@@ -69,7 +69,7 @@ class product_setting(models.Model):
             :param string productvalue
             :return: odoo product or False
         """
-        product = self.env['product.product'].search([(self.odoo_key_column_name, '=', str(productvalue))], limit=1)
+        product = self.env['product.template'].search([(self.odoo_key_column_name, '=', str(productvalue))], limit=1)
         return product
 
     @api.one
@@ -78,9 +78,7 @@ class product_setting(models.Model):
         """
         created_count = 0
         updated_products_ids = []
-
         start_time = time.time()
-
         connection_parameter = self.env['connector_idempiere.connection_parameter_setting'].search([('idempiere_login_client_id', '>', '0')], limit=1)
         if connection_parameter.id==False:
             return {
@@ -89,7 +87,6 @@ class product_setting(models.Model):
                 "message": _("No Connection Setting"),
                 },
             }
-
         ws = QueryDataRequest()
         ws.web_service_type = self.get_product_wst
         ws.offset = 0
@@ -97,41 +94,47 @@ class product_setting(models.Model):
         ws.login = connection_parameter.getLogin()
         ws.filter= self.idempiere_filter
         wsc = connection_parameter.getWebServiceConnection()
-
         response = wsc.send_request(ws)
         wsc.print_xml_request()
         wsc.print_xml_response()
         if response.status == WebServiceResponseStatus.Error:
             raise UserError(_('Error iDempiere: %s') % response.error_message)
-        old_products_from_idempiere = self.env['product.product'].search([('m_product_id', '>', 0)]) #los productos de idempiere tienen el id guardado aqui
+        old_products_from_idempiere = self.env['product.template'].search([('m_product_id', '>', 0)]) #los productos de idempiere tienen el id guardado aqui
         old_products_from_idempiere_ids = old_products_from_idempiere.mapped('id')
         for row in response.data_set:
             values = {}
             for field in row:
                 column = str(field.column).lower()
+                if field.value == 'MAT-456456':
+                    a=1
                 if str(column)==self.odoo_key_column_name:
                     key = str(field.value)
                 if str(column)=='category_name':
                     column = 'categ_id'
                     field.value = self.getCateg_id(str(field.value)) #TODO: Agregar el id de la categoria a Odoo para no buscar por nombre
                 if str(column)=='c_uom_id': #mapeamos el id de unidad de medida de idempiere al id de Odoo
-                    uom = self.env['product.uom'].search([['c_uom_id', '=', field.value], ['active', '=', True]])
+                    uom = self.env['product.uom'].search([['c_uom_id', '=', field.value], ['active', '=', True]],limit=1)
                     if not uom:
                         raise UserError(_('Error iDempiere: En Odoo debe configurar una unidad de medida equivalente a idempiere, con c_uom_id =%s') % str(field.value))
-                        column = 'uom_id'
-                        field.value = uom.id
+                    
+                    column = 'uom_id'
+                    field.value = uom.id
                 values[column] = field.value
             values['active'] = True #los productos importados de idempiere son activos (la vista product_product ya considera esto)
+            if values['uom_id']:
+                values['uom_po_id'] = values['uom_id'] #seteamos la unidad de medida de compra igual a la de venta
+            values['invoice_policy'] = 'delivery' #para no tener que generar la factura
+            values['type'] = 'consu' #para no tener alertas por falta de inventario
             product = self.get_odoo_product(key)
             if not product:
-                product = self.env['product.product'].create(values)
+                product = self.env['product.template'].create(values)
                 created_count = created_count + 1
             else:
                 product.write(values)
                 updated_products_ids.append(product.id)
         #productso deprecados
         deprecated_product_ids = [item for item in old_products_from_idempiere_ids if item not in updated_products_ids] 
-        deprecated_products = self.env['product.product'].search([('id', 'in', deprecated_product_ids)])
+        deprecated_products = self.env['product.template'].search([('id', 'in', deprecated_product_ids)])
         deprecated_products.write({'active': False})
         end_time = time.time()
         message= "Last Processing Date: " + str(datetime.datetime.now()) + " UTC"\

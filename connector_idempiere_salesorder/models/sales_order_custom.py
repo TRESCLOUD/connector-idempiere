@@ -237,10 +237,11 @@ class SaleOrder(models.Model):
                                 #Field('Discount', 0.0), #0% para el caso de uso
                                 #Field('LineNetAmt',line.price_subtotal),
                                 Field('Line', line.sequence),
+                                Field('IsDiscountApplied', True),
                                 Field('Description', line.name),
                                 Field('DatePromised',datePromisedLine)
                                 ])
-                idempiere_extra_line_fields = order.order_line.idempiere_extra_line_fields()
+                idempiere_extra_line_fields = line.idempiere_extra_line_fields()
                 if idempiere_extra_line_fields:
                     wsline.data_row.extend(idempiere_extra_line_fields)
                 ws2lines.add(wsline)
