@@ -164,27 +164,36 @@ class SaleOrder(models.Model):
         dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
         datePromised = fields.Datetime.from_string(self.commitment_date)
         datePromised_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,datePromised)))
-
+        #business partner
         C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
         if C_BPartner_ID == 0:
            C_BPartner_ID =  customer_setting.createBPartner(connection_parameter,order.partner_id)
            self.partner_id.C_Idempiere_ID = C_BPartner_ID 
+        #contactos
         invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
         if invoiceContact==0:
             invoiceContact = customer_setting.createContact(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
             self.contact_invoice_id.C_Idempiere_ID = invoiceContact 
         deliveryContact = customer_setting.getContactID(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
         if deliveryContact==0:
-            deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
-            self.contact_shipping_id.C_Idempiere_ID = deliveryContact
+            if self.contact_shipping_id == self.contact_invoice_id: #cuando el contacto es el mismo no lo creamos dos veces
+                deliveryContact = invoiceContact
+            else:
+                deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+                self.contact_shipping_id.C_Idempiere_ID = deliveryContact
+        #direcciones
         invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
         if invoiceAddress == 0:
-            invoiceAddress = customer_setting.createInvoiceAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+            invoiceAddress = customer_setting.createAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
             self.partner_invoice_id.C_Idempiere_ID = invoiceAddress 
         deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
         if deliveryAddress == 0:
-            deliveryAddress = customer_setting.createDeliveryAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
-            self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
+            if self.partner_shipping_id == self.partner_invoice_id:
+                 deliveryAddress = invoiceAddress
+            else: 
+                deliveryAddress = customer_setting.createAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
+                self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
+        #referencia de cliente
         customer_reference = self.name
         if self.client_order_ref:
             customer_reference += "-"+self.client_order_ref 
@@ -219,38 +228,51 @@ class SaleOrder(models.Model):
             wsline.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
 
             productID = product_setting.getProductID(connection_parameter,line.product_id.default_code)
-            if productID >0:
-                daysPromised = 0
-                if line.customer_lead:
-                    daysPromised = int(line.customer_lead)
-                daysPromised = timedelta(days=daysPromised)
-                datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
-                wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
-                                Field('C_Order_ID', '@C_Order.C_Order_ID'),
-                                Field('M_Product_ID', productID),
-                                Field('QtyEntered', line.product_uom_qty),
-                                Field('QtyOrdered', line.product_uom_qty),
-                                Field('C_UOM_ID',line.product_uom.c_uom_id),
-                                Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
-                                Field('PriceList', line.price_unit),
-                                Field('PriceActual', line.price_unit),
-                                #Field('Discount', 0.0), #0% para el caso de uso
-                                #Field('LineNetAmt',line.price_subtotal),
-                                Field('Line', line.sequence),
-                                Field('IsDiscountApplied', True),
-                                Field('Description', line.name),
-                                Field('DatePromised',datePromisedLine)
-                                ])
-                idempiere_extra_line_fields = line.idempiere_extra_line_fields()
-                if idempiere_extra_line_fields:
-                    wsline.data_row.extend(idempiere_extra_line_fields)
-                ws2lines.add(wsline)
-            else:
-                productNotFound = True
+            if not productID > 0:
                 order.toSchedule(_("Product Not Found")+ " " + str(line.product_id.default_code))
+                return False
 
-        if productNotFound:
-            return False
+            daysPromised = 0
+            if line.customer_lead:
+                daysPromised = int(line.customer_lead)
+            daysPromised = timedelta(days=daysPromised)
+            datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
+            wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
+                            Field('C_Order_ID', '@C_Order.C_Order_ID'),
+                            Field('M_Product_ID', productID),
+                            Field('QtyEntered', line.product_uom_qty),
+                            Field('QtyOrdered', line.product_uom_qty),
+                            Field('C_UOM_ID',line.product_uom.c_uom_id),
+                            Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
+                            Field('PriceList', line.price_unit),
+                            Field('PriceActual', line.price_unit),
+                            #Field('Discount', 0.0), #0% para el caso de uso
+                            #Field('LineNetAmt',line.price_subtotal),
+                            Field('Line', line.sequence),
+                            #Field('IsDiscountApplied', True),
+                            Field('Description', line.name),
+                            Field('DatePromised',datePromisedLine)
+                            ])
+            idempiere_extra_line_fields = line.idempiere_extra_line_fields()
+            if idempiere_extra_line_fields:
+                wsline.data_row.extend(idempiere_extra_line_fields)
+            ws2lines.add(wsline)
+            if line.discount:
+                #creamos una segunda linea con el producto de descuento
+                wsline_discount = CreateDataRequest()
+                wsline_discount.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
+
+                total_discount_amount = line.product_uom_qty*line.price_unit - line.price_subtotal
+                wsline_discount.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
+                                Field('C_Order_ID', '@C_Order.C_Order_ID'),
+                                Field('C_Charge_ID', '1000586'), #Quemado en codigo
+                                Field('QtyEntered', 1.0),
+                                Field('QtyOrdered', 1.0),
+                                Field('PriceEntered', (-1)*total_discount_amount),
+                                Field('PriceActual', (-1)*total_discount_amount),
+                                Field('Line', line.sequence + 5),
+                                ])
+                ws2lines.add(wsline_discount)
 
         #ws3 = SetDocActionRequest()
         #ws3.web_service_type = sales_order_setting.idempiere_docaction_web_service_type

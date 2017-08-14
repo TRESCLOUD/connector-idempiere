@@ -2,3 +2,4 @@
 
 import customer_setting
 import res_partner
+import res_user
