@@ -33,12 +33,12 @@ msgstr "Conexión"
 #. module: connector_idempiere
 #: model:ir.actions.act_window,name:connector_idempiere.connector_idempiere_connection_parameter_setting_action_window
 msgid "Connection Parameter Setting window"
-msgstr "Ventana de configuración Parametro Conexión"
+msgstr "Ventana de Configuración de Parametros de Conexión"
 
 #. module: connector_idempiere
 #: model:ir.actions.act_window,help:connector_idempiere.connector_idempiere_connection_parameter_setting_action_window
 msgid "Create the first Connection Parameter Setting"
-msgstr "Crea el primer parámetro de condfiguración de conexión"
+msgstr "Creee el primer parámetro de connfiguración de conexión"
 
 #. modules: connector_idempiere
 #: model:ir.model.fields,field_description:connector_idempiere.field_connector_idempiere_connection_parameter_setting_display_name
@@ -48,7 +48,7 @@ msgstr "Nombre a mostrar"
 #. module: connector_idempiere
 #: model:ir.ui.menu,name:connector_idempiere.setting
 msgid "End Points"
-msgstr "Terminales"
+msgstr "Servicios Web"
 
 #. module: connector_idempiere
 #: code:addons/connector_idempiere/models/connection_parameter_setting.py:128

@@ -125,7 +125,7 @@ msgstr "Producto Actualizado"
 #. module: connector_idempiere_product
 #: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_read_product_wst
 msgid "WST Read a Product"
-msgstr "WST Lee un Producto"
+msgstr "WST Leer Productos"
 
 #. module: connector_idempiere_product
 #: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_get_product_wst
@@ -135,7 +135,7 @@ msgstr "WST obtener Productos"
 #. module: connector_idempiere_product
 #: model:ir.model.fields,help:connector_idempiere_product.field_connector_idempiere_product_product_setting_get_product_wst
 msgid "Web Service Type for get a list of Products and register in odoo"
-msgstr "Tipo de Servicio Web para obtener una lista de Productos y registrar en odoo"
+msgstr "Web Service para obtener la lista de Productos y registrarlos en Odoo"
 
 #. module: connector_idempiere_product
 #: model:ir.model,name:connector_idempiere_product.model_connector_idempiere_product_product_setting
