@@ -33,7 +33,7 @@ msgstr "Crear"
 #. module: connector_idempiere_bpartner
 #: model:ir.actions.act_window,help:connector_idempiere_bpartner.connector_idempiere_bpartner_setting_action_window
 msgid "Create the first Customer Setting"
-msgstr "Crea la primera Configuración de Cliente"
+msgstr "Cree el primer parametro de configuración de Cliente"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.ui.menu,name:connector_idempiere_bpartner.customer_setting
@@ -43,7 +43,7 @@ msgstr "Cliente"
 #. module: connector_idempiere_bpartner
 #: model:ir.actions.act_window,name:connector_idempiere_bpartner.connector_idempiere_bpartner_setting_action_window
 msgid "Customer Setting window"
-msgstr "Ventana Configuración Cliente"
+msgstr "Ventana de Configuración de Cliente"
 
 #. modules: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_display_name
@@ -68,12 +68,12 @@ msgstr "Última actualización el"
 #. modules: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_odoo_key_column_name
 msgid "Odoo Key Column Name"
-msgstr "Columna Clave Odoo"
+msgstr "Columna Clave en Odoo"
 
 #. modules: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_read_bpartner_wst
 msgid "Only Read a register, not create or update data"
-msgstr "Solo lee un registro, no creo o actualiza datos"
+msgstr "Solo lee un registro, no crea o actualiza datos"
 
 #. modules: connector_idempiere_bpartner
 #: model:ir.ui.view,arch_db:connector_idempiere_bpartner.connector_idempiere_bpartner_setting_form
@@ -93,12 +93,12 @@ msgstr "Lee un Contacto de Cliente de AD_User"
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_composite_wst
 msgid "WST Composite"
-msgstr "WST Composite"
+msgstr "WST Compuesto"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_bplocation_wst
 msgid "WST Create BP Location"
-msgstr "WST Crear BP Location"
+msgstr "WST Crear BP_Location"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_bpartner_wst
@@ -113,47 +113,47 @@ msgstr "WST Crear Contacto"
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_location_wst
 msgid "WST Create a Location"
-msgstr "WST Crear una Ubicación"
+msgstr "WST Crear Ubicación"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_read_bplocation_wst
 msgid "WST Read a BP Location"
-msgstr "WST Lee una BP Location"
+msgstr "WST Leer BP_Location"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_read_contact_wst
 msgid "WST Read a Contact"
-msgstr "WST Leer un Contacto"
+msgstr "WST Leer Contacto"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,field_description:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_read_bpartner_wst
 msgid "WST Read a Customer"
-msgstr "WST Leer un Cliente"
+msgstr "WST Leer Cliente"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_contact_wst
 msgid "Web Service Type for Create a Contact of Business Partner"
-msgstr "Tipo Servicio Web para crear un contacto de un Cliente"
+msgstr "Web Service para crear contactos asociados a un cliente"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_bpartner_wst
 msgid "Web Service Type for Create a Customer or Supplier"
-msgstr "Tipo Servicio Web para crear un Cliente o Proveedor"
+msgstr "Web Service para crear un cliente o Proveedor"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_location_wst
 msgid "Web Service Type for Create a Location (Address)"
-msgstr "Tipo Servicio Web para crear una Ubicación (Dirección)"
+msgstr "Web Service para crear una Ubicación (Dirección)"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_composite_wst
 msgid "Web Service Type for Group Operations"
-msgstr "Tipo Servicio Web para crear un Grupo de Operaciones"
+msgstr "Web Service para ejecutar un grupo de operaciones"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model.fields,help:connector_idempiere_bpartner.field_connector_idempiere_bpartner_customer_setting_create_bplocation_wst
 msgid "Web Service Type for associate a Location (Address) to Business Partner"
-msgstr "Tipo Servicio Web para asociar una Ubicación (Dirección) a un Cliente"
+msgstr "Web Service para asociar una Ubicación (Dirección) a un Cliente"
 
 #. module: connector_idempiere_bpartner
 #: model:ir.model,name:connector_idempiere_bpartner.model_connector_idempiere_bpartner_customer_setting

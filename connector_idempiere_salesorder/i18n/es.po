@@ -70,27 +70,27 @@ msgstr "Contacto/dirección"
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_contact_shipping_id
 msgid "Contact Delivery Address"
-msgstr "Dirección Entrega Contacto"
+msgstr "Contacto para Entrega"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_contact_shipping_id
 msgid "Contact Delivery address for current sales order."
-msgstr "Dirección de Entrega de Contacto para la actual orden de venta."
+msgstr "Persona a la que se debe entregar el producto"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_contact_invoice_id
 msgid "Contact Invoice Address"
-msgstr "Dirección Factura Contacto"
+msgstr "Contacto para Factura"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_contact_invoice_id
 msgid "Contact Invoice address for current sales order."
-msgstr "Dirección Factura Contacto para la actual orden de venta."
+msgstr "PErsona a la que se debe entregar la factura"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
 msgid "Contact Name"
-msgstr "Nombre del contacto"
+msgstr "Nombre"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
@@ -130,7 +130,7 @@ msgstr "Políticas de Entrega"
 #. module: connector_idempiere_salesorder
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_form
 msgid "Description for this sale, example: 'Printing equipment sale for project ABC'"
-msgstr "Descripción para la venta, ejemplo: 'Impreción de equipo de venta para el Proyecto ABC'"
+msgstr "Descripción para la venta, ejemplo: 'Impresión de equipo de venta para el Proyecto ABC'"
 
 #. modules: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_display_name
@@ -262,7 +262,7 @@ msgstr "Empresa"
 #: model:ir.model,name:connector_idempiere_salesorder.model_account_payment_term
 #: model:ir.model,name:trescloud_sismode_sales.model_account_payment_term
 msgid "Payment Term"
-msgstr "Condiciones de pago"
+msgstr "Términos de pago"
 
 #. modules: trescloud_sismode_sales, connector_idempiere_salesorder
 #: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_action_payment_term_form_idempiere
@@ -333,7 +333,7 @@ msgstr "Descripción corta de ventas"
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_product_template_idempiere_id
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_product_uom_c_uom_id
 msgid "Show the related ID from iDempiere"
-msgstr "Mostrar el ID relacionado de iDempiere"
+msgstr "Muestra el ID relacionado de iDempiere"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
@@ -388,7 +388,7 @@ msgstr "El ID de base de datos del almacén en iDempiere"
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_name
 msgid "The document name as shown in iDempmiere"
-msgstr "El documento como está en iDempmiere"
+msgstr "El nombre del documento como está en iDempmiere"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_organization
@@ -455,17 +455,17 @@ msgstr "iDempiere C_DocTypeTarget_ID"
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_composite_web_service_type
 msgid "iDempiere Composite WebService Type"
-msgstr "iDempiere Composite WebService Type"
+msgstr "WebService compuesto"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_customer_web_service_type
 msgid "iDempiere Customer WebService Type"
-msgstr "iDempiere Cliente WebService Type"
+msgstr "WebService Cliente"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_docaction_web_service_type
 msgid "iDempiere DocAction WebService Type"
-msgstr "iDempiere DocAction WebService Type"
+msgstr "WebService DocAction"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.actions.act_window,name:connector_idempiere_salesorder.action_idempiere_documents
@@ -486,12 +486,12 @@ msgstr "iDempiere M_Warehouse_ID"
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_order_web_service_type
 msgid "iDempiere Order WebService Type"
-msgstr "Orden de Tipo de Servicio Web iDempiere"
+msgstr "WebService Orden de Venta"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_orderline_web_service_type
 msgid "iDempiere OrderLine WebService Type"
-msgstr "Línea de Orden iDempiere WebService"
+msgstr "WebService Línea de Orden"
 
 #. module: connector_idempiere_salesorder
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_setting_form
