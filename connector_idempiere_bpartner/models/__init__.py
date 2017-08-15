@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from . import customer_setting
+import customer_setting
+import res_partner
+import res_user

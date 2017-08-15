@@ -1,0 +1,529 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* connector_idempiere_salesorder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-08 20:04+0000\n"
+"PO-Revision-Date: 2017-08-08 20:04+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Address"
+msgstr "Dirección"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "After Receipt"
+msgstr "Después de Recibir"
+
+#. modules: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sales_order_custom.py:138
+#, python-format
+msgid "Alert"
+msgstr "Alerta"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_res_partner_delivery_policy
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_res_users_delivery_policy
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_delivery_policy
+msgid "Allow the user select the delivery policy type to be use in sale order"
+msgstr "Permite al usuario seleccionar las políticas de entrega a ser usadas en las órdenes de venta"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "Availability"
+msgstr "Disponibilidad"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "City"
+msgstr "Ciudad"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "Complete Line"
+msgstr "Línea Completa"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "Complete Order"
+msgstr "Orden Completa"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Contact / Address"
+msgstr "Contacto/dirección"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_contact_shipping_id
+msgid "Contact Delivery Address"
+msgstr "Contacto para Entrega"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_contact_shipping_id
+msgid "Contact Delivery address for current sales order."
+msgstr "Persona a la que se debe entregar el producto"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_contact_invoice_id
+msgid "Contact Invoice Address"
+msgstr "Contacto para Factura"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_contact_invoice_id
+msgid "Contact Invoice address for current sales order."
+msgstr "PErsona a la que se debe entregar la factura"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Contact Name"
+msgstr "Nombre"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Country"
+msgstr "País"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.actions.act_window,help:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_setting_action_window
+msgid "Create the first Sale Order Setting"
+msgstr "Configuración Creación de la orden de venta"
+
+#. module: connector_idempiere_product
+#: code:addons/connector_idempiere_product/models/product_setting.py:134
+#, python-format
+msgid "Created Products : , Updated Products: "
+msgstr "Productos Creados : , Productos Actualizados: "
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_create_uid
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_create_date
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_res_partner_delivery_policy
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_res_users_delivery_policy
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_delivery_policy
+msgid "Delivery policy"
+msgstr "Políticas de Entrega"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_form
+msgid "Description for this sale, example: 'Printing equipment sale for project ABC'"
+msgstr "Descripción para la venta, ejemplo: 'Impresión de equipo de venta para el Proyecto ABC'"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_display_name
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_idempiere_document_type_id
+msgid "Document"
+msgstr "Documento"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_name
+msgid "Document Name"
+msgstr "Nombre de Documento"
+
+#. modules: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sales_order_custom.py:117
+#, python-format
+msgid "Error iDempiere: %s"
+msgstr "Error iDempiere: %s"
+
+#. module: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sales_order_custom.py:113
+#, python-format
+msgid "Error: \n"
+"\n"
+"Los siguientes campos no han están llenados, por favor elegir los datos de esos campos para continuar con la venta: \n"
+"- %s"
+msgstr "Error: \n"
+"\n"
+"Los siguientes campos no han están llenados, por favor elegir los datos de esos campos para continuar con la venta: \n"
+"- %s"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "Force"
+msgstr "Forzar"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_form
+msgid "Abrir en Idempiere"
+msgstr "Abrir en Idempiere"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_id
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_account_payment_term_C_PaymentTerm_ID
+msgid "ID Payment Term from iDempiere"
+msgstr "ID Plazo de pago de iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_product_product_idempiere_id
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_product_template_idempiere_id
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_product_uom_c_uom_id
+msgid "ID from iDempiere"
+msgstr "ID de iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_account_tax_C_Tax_ID
+msgid "ID tax from Idempiere"
+msgstr "ID Impuesto de Idempiere"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting___last_update
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_write_uid
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. modules: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_write_date
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: connector_idempiere_salesorder
+#: selection:res.partner,delivery_policy:0
+#: selection:sale.order,delivery_policy:0
+msgid "Manual"
+msgstr "Manual"
+
+#. modules: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sale_order_synchronizer.py:19
+#, python-format
+msgid "No Connection Setting"
+msgstr "Sin configuración de conexión"
+
+#. module: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sale_order_synchronizer.py:23
+#, python-format
+msgid "No Customer Setting"
+msgstr "Sin configuración de Cliente"
+
+#. module: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sale_order_synchronizer.py:27
+#, python-format
+msgid "No Product Setting"
+msgstr "Sin configuración de producto"
+
+#. module: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sale_order_synchronizer.py:31
+#, python-format
+msgid "No Sale Order Setting"
+msgstr "Sin configuración de Orden de venta"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_organization
+msgid "Organization"
+msgstr "Organización"
+
+#. modules: trescloud_sismode_sales, connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_res_partner
+#: model:ir.model,name:trescloud_sismode_sales.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. modules: trescloud_sismode_sales, connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_account_payment_term
+#: model:ir.model,name:trescloud_sismode_sales.model_account_payment_term
+msgid "Payment Term"
+msgstr "Términos de pago"
+
+#. modules: trescloud_sismode_sales, connector_idempiere_salesorder
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_action_payment_term_form_idempiere
+#: model:ir.ui.view,arch_db:trescloud_sismode_sales.view_partner_category_price_tree
+msgid "Payment Terms"
+msgstr "Términos de pago"
+
+#. module: connector_idempiere_salesorder
+#: code:addons/connector_idempiere_salesorder/models/sales_order_custom.py:215
+#, python-format
+msgid "Product Not Found"
+msgstr "Producto No Econtrado"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_product_uom
+msgid "Product Unit of Measure"
+msgstr "Unidad de medida del producto"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_product_template_action_idempiere
+msgid "Products"
+msgstr "Productos"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_idempiere_sale_description
+msgid "Sale Description"
+msgstr "Descripción de venta"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.sale_order_setting
+msgid "Sale Order"
+msgstr "Sale Order"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.actions.act_window,name:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_setting_action_window
+msgid "Sale Order Setting window"
+msgstr "Ventana de Configuración de Ordenes de Venta"
+
+#. modules: trescloud_sismode_sales, connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_sale_order
+#: model:ir.model,name:trescloud_sismode_sales.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_scheduled
+msgid "Scheduled for later sync"
+msgstr "Agendado para sincronizado para después"
+
+#. modules: connector_idempiere, connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere.connector_idempiere_connection_parameter_setting_form
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_setting_form
+msgid "Settings"
+msgstr "Configuración"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_idempiere_sale_description
+msgid "Short description of this sale"
+msgstr "Descripción corta de ventas"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_product_product_idempiere_id
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_product_template_idempiere_id
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_product_uom_c_uom_id
+msgid "Show the related ID from iDempiere"
+msgstr "Muestra el ID relacionado de iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "State"
+msgstr "Estado"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_account_tax_C_Tax_ID
+msgid "Store the tax id from Idempiere"
+msgstr "Almacena el id del impuesto de Idempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Street 2..."
+msgstr "Calle 2..."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "Street..."
+msgstr "Calle..."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_sync_message
+msgid "Sync message"
+msgstr "Mensaje de Sincronización"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_action_tax_form_idempiere
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_c_doctype_id
+msgid "The database ID of the document in iDempiere"
+msgstr "El ID de base de datos del documento en iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_ad_org_id
+msgid "The database ID of the organization in iDempiere"
+msgstr "El ID de base de datos de la organización en iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_m_warehouse_id
+msgid "The database ID of the warehouse in iDempiere"
+msgstr "El ID de base de datos del almacén en iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_name
+msgid "The document name as shown in iDempmiere"
+msgstr "El nombre del documento como está en iDempmiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_organization
+msgid "The organization name as shown in iDempmiere, for informative purposes only"
+msgstr "Nombre de la organización como está en iDempmiere, para fines informativos."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_account_payment_term_C_PaymentTerm_ID
+msgid "The terms of Payment C_PaymentTerm_ID"
+msgstr "Plazos de pago C_PaymentTerm_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_idempiere_document_type_warehouse
+msgid "The warehouse name as shown in iDempmiere"
+msgstr "Nombre del Almacén como se muestra en iDempmiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_product_uom_form_action_idempiere
+msgid "Units of Measure"
+msgstr "Unidades de medida"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_warehouse
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "ZIP"
+msgstr "C.P."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_connector_idempiere_salesorder_sale_order_setting
+msgid "connector_idempiere_salesorder.sale_order_setting"
+msgstr "connector_idempiere_salesorder.sale_order_setting"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "e.g. Mr."
+msgstr "p.e., Mr."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "e.g. Sales Director"
+msgstr "p.e. Director de Ventas"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.idempiere_document_type_form
+msgid "iDemmpiere Document Types"
+msgstr "iDemmpiere Document Types"
+msgid "iDempiere AD_Client_ID"
+msgstr "iDempiere AD_Client_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_ad_org_id
+msgid "iDempiere AD_Org_ID"
+msgstr "iDempiere AD_Org_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_c_doctypetarget_id
+msgid "iDempiere C_DocTypeTarget_ID"
+msgstr "iDempiere C_DocTypeTarget_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_composite_web_service_type
+msgid "iDempiere Composite WebService Type"
+msgstr "WebService compuesto"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_customer_web_service_type
+msgid "iDempiere Customer WebService Type"
+msgstr "WebService Cliente"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_docaction_web_service_type
+msgid "iDempiere DocAction WebService Type"
+msgstr "WebService DocAction"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.actions.act_window,name:connector_idempiere_salesorder.action_idempiere_documents
+#: model:ir.ui.menu,name:connector_idempiere_salesorder.menu_idempiere_documents
+msgid "iDempiere Document Types"
+msgstr "Tipo de Documento en iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_m_pricelist_id
+msgid "iDempiere M_PriceList_ID"
+msgstr "iDempiere M_PriceList_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_m_warehouse_id
+msgid "iDempiere M_Warehouse_ID"
+msgstr "iDempiere M_Warehouse_ID"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_order_web_service_type
+msgid "iDempiere Order WebService Type"
+msgstr "WebService Orden de Venta"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_connector_idempiere_salesorder_sale_order_setting_idempiere_orderline_web_service_type
+msgid "iDempiere OrderLine WebService Type"
+msgstr "WebService Línea de Orden"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.connector_idempiere_salesorder_sale_order_setting_form
+msgid "iDempiere Sale Order Setting"
+msgstr "Configuración Órdenes de Venta iDempiere"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_ad_org_id
+msgid "iDempiere ad_org_id"
+msgstr "iDempiere ad_org_id"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_c_doctype_id
+msgid "iDempiere c_doctype_id"
+msgstr "iDempiere c_doctype_id"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,help:connector_idempiere_salesorder.field_sale_order_idempiere_document_type_id
+msgid "iDempiere document, automatically sets the organization, warehouse, and other internal parameters"
+msgstr "Documento iDempiere, automáticamente establecido en la organización, ubicaciones y otroas parámetros internos"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_idempiere_document_type_m_warehouse_id
+msgid "iDempiere m_warehouse_id"
+msgstr "iDempiere m_warehouse_id"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model,name:connector_idempiere_salesorder.model_idempiere_document_type
+msgid "idempiere.document.type"
+msgstr "idempiere.document.type"
+
+#. module: connector_idempiere_salesorder
+#: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
+msgid "internal note..."
+msgstr "Nota interna..."

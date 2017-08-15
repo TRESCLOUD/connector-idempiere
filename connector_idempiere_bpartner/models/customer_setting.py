@@ -18,7 +18,9 @@ class customer_setting(models.Model):
 
     odoo_key_column_name = fields.Char('Odoo Key Column Name',required=True)
     idempiere_key_column_name = fields.Char('iDempiere Key Column Name',required=True)
-    read_bpartner_wst = fields.Char('WST Read a Customer',required=True,help='Only Read a register, not create or update data')
+    read_bpartner_wst = fields.Char('WST Read a Customer',required=True,default='',help='Only Read a register, not create or update data')
+    read_contact_wst = fields.Char('WST Read a Contact',required=True,default='',help='Read a Contact of Customer From AD_User')
+    read_bplocation_wst = fields.Char('WST Read a BP Location',required=True,default='',help='Read a Business Partner Location of Customer From C_BPartner_Location')
     create_bpartner_wst = fields.Char('WST Create Business Partner',required=True,help='Web Service Type for Create a Customer or Supplier')
     create_contact_wst = fields.Char('WST Create Contact',required=True,help='Web Service Type for Create a Contact of Business Partner')
     create_bplocation_wst = fields.Char('WST Create BP Location',required=True,help='Web Service Type for associate a Location (Address) to Business Partner')
@@ -31,83 +33,122 @@ class customer_setting(models.Model):
             :param res.partner partner
             :return: iDempiere's C_BPartner_ID of Customer
         """
-        ws = QueryDataRequest()
-        ws.web_service_type = self.read_bpartner_wst
-        ws.offset = 0
-        ws.limit = 1
-        ws.login = connection.getLogin()
+        #para el partner usamos la cedula/ruc o el codigo parametrizado
         odookey = str(partner[self.odoo_key_column_name])
-        ws.filter= self.idempiere_key_column_name+" = '" +odookey+"'"
-        wsc = connection.getWebServiceConnection()
-
-        customerID = 0 #id en la bdd de idempiere
-        try:
-            response = wsc.send_request(ws)
-            wsc.print_xml_request()
-            wsc.print_xml_response()
-            if response.status == WebServiceResponseStatus.Error:
-                traceback.print_exc()
-        except:
-            traceback.print_exc()
-
-        #else:
-        for row in response.data_set:
-            for line in row:
-                if line.column == 'C_BPartner_ID':
-                #if line['column'] == 'C_BPartner_ID':
-                    customerID = int(line.value)
-
+        filter = self.idempiere_key_column_name+" = '" +odookey+"'"
+        customerID = connection.getRecordID(self.read_bpartner_wst,filter,'C_BPartner_ID')
         return customerID
 
-    #Send the customer to be registered in idempiere
-    def sendCustomer(self,connection,partner):
+    def getContactID(self,connection,contact,c_bpartner_id):
+        """ Obtain the idempiere record identifier (AD_User_ID) of a customer' contact associated with an odoo sales order
+            :param connection_parameter_setting connection
+            :param res.partner contact (Type = Contact)
+            :param int c_bpartner_id
+            :return: iDempiere's AD_User_ID of Contact
+        """
+        #si el nombre coincide exactamente, y si el parent_id apunta al al mismo.
+        filter = "Name = '" + str(contact.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsActive = 'Y'"
+        AD_User_ID = connection.getRecordID(self.read_contact_wst,filter,'AD_User_ID')
+        return AD_User_ID
+
+    def getInvoiceAddressID(self,connection,address,c_bpartner_id):
+        """ Obtain the idempiere record identifier (C_BPartner_Location) of a Invoice customer'address associated with an odoo sales order
+            :param connection_parameter_setting connection
+            :param res.partner address (Type = Delivery)
+            :param int c_bpartner_id
+            :return: iDempiere's AD_User_ID of Contact
+        """
+        filter = "Name = '" + str(address.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsBillTo = 'Y'" \
+                 + " AND IsActive = 'Y'"
+        C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
+        return C_BPartner_Location_ID
+
+    def getDeliveryAddressID(self,connection,address,c_bpartner_id):
+        """ Obtain the idempiere record identifier (C_BPartner_Location) of a Delivery customer'address associated with an odoo sales order
+            :param connection_parameter_setting connection
+            :param res.partner address (Type = Delivery)
+            :param int c_bpartner_id
+            :return: iDempiere's AD_User_ID of Contact
+        """
+        filter = "Name = '" + str(address.name) \
+                 + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
+                 + " AND IsShipTo = 'Y'" \
+                 + " AND IsActive = 'Y'"
+        C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
+
+        return C_BPartner_Location_ID
+
+
+    def createBPartner(self,connection,partner):
         """ Send the customer to be registered in idempiere
             :param connection_parameter_setting connection
             :param res.partner partner
+            :return: int New C_BPartner_ID
         """
-        ws1 = CreateDataRequest()
-        ws1.web_service_type = self.create_bpartner_wst #WebService to create the customer
-        ws1.data_row = [Field('Name',  str(partner.name)),
-                        Field('Value', str(partner.vat)),
-                        Field('TaxID', str(partner.vat))]
+        #WebService to create the customer
+        fields = [Field('Name',  str(partner.name)),
+                  Field('Value', str(partner.vat)),
+                  Field('TaxID', str(partner.vat)),
+                  Field('C_BP_Group_ID', str(partner.partner_category_id.c_bp_group_id)), 
+                  Field('SalesRep_ID', str(partner.user_id.ad_user_id)),
+                  ]
+        C_BPartner_ID = connection.sendRegister(self.create_bpartner_wst,fields)
 
+        return C_BPartner_ID
 
-        ws2 = CreateDataRequest()
-        ws2.web_service_type = self.create_contact_wst #WebService to create a contact of customer
-        ws2.data_row = [Field('Name',  str(partner.name)),
-                        Field('C_BPartner_ID', '@C_BPartner.C_BPartner_ID')]
+    def createContact(self,connection,contact,c_bpartner_id):
+        """ Send the customer to be registered in idempiere
+            :param connection_parameter_setting connection
+            :param res.partner partner
+            :param int c_bpartner_id (Parent ID)
+            :return: int New AD_User_ID
+        """
+        fields = [Field('Name',  str(contact.name)),
+                  Field('Description', str(contact.function or '')),
+                  Field('EMail', str(contact.email or '')),
+                  Field('Phone', str(contact.phone or '')),
+                  Field('Phone2', str(contact.mobile or '')),
+                  Field('Comments', str(contact.comment or '')),
+                  Field('C_BPartner_ID', c_bpartner_id),
+                  ]                      
+        AD_User_ID = connection.sendRegister(self.create_contact_wst,fields)
 
-        ws3 = CreateDataRequest()
-        ws3.web_service_type = self.create_location_wst #WebService to create a C_Location of customer
-        ws3.data_row = [Field('C_Country_ID', '171'),
-                        Field('City', str(partner.city)),
-                        Field('Address1', str(partner.street))]
+        return AD_User_ID
 
-        ws4 = CreateDataRequest()
-        ws4.web_service_type = self.create_bplocation_wst #WebService to create a C_BPartner_Location of customer
-        ws4.data_row = [Field('Name',  str(partner.city)),
-                        Field('C_Location_ID', '@C_Location.C_Location_ID'),
-                        Field('C_BPartner_ID', '@C_BPartner.C_BPartner_ID')]
-
-        ws0 = CompositeOperationRequest()
-        ws0.login = connection.getLogin()
-        ws0.operations.append(Operation(ws1))
-        ws0.operations.append(Operation(ws2))
-        ws0.operations.append(Operation(ws3))
-        ws0.operations.append(Operation(ws4))
-        ws0.web_service_type = self.composite_wst #WebService composite to group the operations necessary to create a customer with its basic data
-
-        wsc = connection.getWebServiceConnection()
-        customerID = 0
-        
-        response = wsc.send_request(ws0)
-        wsc.print_xml_request()
-        wsc.print_xml_response()
-        
-        if response.status == WebServiceResponseStatus.Error:
-            raise UserError(_('Error de conexion %s') % response.error_message)
-
-        if response.status != WebServiceResponseStatus.Error:
-            customerID = int(response.responses[0].record_id)
-        
-        return customerID
+    def createAddress(self,connection,address,c_bpartner_id):
+        """ Send the customer's Invoice Address to be registered in idempiere
+            :param connection_parameter_setting connection
+            :param res.partner address
+            :param int c_bpartner_id
+            :return: int New C_BPartner_Location_ID
+        """
+        locationFields = [
+                  Field('Address1', str(address.street or '')),
+                  Field('Address2', str(address.street2 or '')),
+                  Field('City', str(address.city or '')),
+                  Field('Postal', str(address.zip or '')),
+                  ]
+        if address.city_id:
+            if not address.city_id.C_City_ID:
+                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.city_id.name)
+            locationFields.append(Field('C_City_ID', str(address.city_id.C_City_ID)))
+        if address.state_id:
+            if not address.state_id.C_Region_ID:
+                raise UserError(_('Error iDempiere: La provincia %s no tiene un id relacionado en iDempiere') % address.state_id.name)
+            locationFields.append(Field('C_Region_ID', str(address.state_id.C_Region_ID)))
+        if address.country_id:
+            if not address.country_id.C_Country_ID:
+                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
+            locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
+        C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
+        bpLocationFields= [Field('Name',  str(address.name)),
+                           Field('C_Location_ID', C_Location_ID),
+                           Field('C_BPartner_ID',c_bpartner_id),
+                           Field('IsBillTo','Y'), #Ambobs en Y porque Odoo no diferencia
+                           Field('IsShipTo','Y')]
+        C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
+        return C_BPartner_Location_ID
