@@ -1,7 +1,6 @@
 <odoo>
-  <data>
+  	<data>
     <!-- explicit list view definition -->
-
     <record model="ir.ui.view" id="connector_idempiere_connection_parameter_setting_list">
       <field name="name">connector_idempiere_connection_parameter_setting list</field>
       <field name="model">connector_idempiere.connection_parameter_setting</field>
@@ -11,7 +10,7 @@
         </tree>
       </field>
     </record>
-
+	
     <record model="ir.ui.view" id="connector_idempiere_connection_parameter_setting_form">
       <field name="name">connector_idempiere_connection_parameter_setting form</field>
       <field name="model">connector_idempiere.connection_parameter_setting</field>
@@ -35,7 +34,7 @@
         </form>
       </field>
     </record>
-
+	
     <record model="ir.ui.view" id="connector_idempiere_connection_parameter_setting_search">
         <field name="name">connector_idempiere_connection_parameter_setting search</field>
         <field name="model">connector_idempiere.connection_parameter_setting</field>
@@ -45,9 +44,8 @@
             </search>
         </field>
     </record>
-
-        <!-- actions opening views on models -->
-
+	
+    <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="connector_idempiere_connection_parameter_setting_action_window">
       <field name="name">Connection Parameter Setting window</field>
       <field name="res_model">connector_idempiere.connection_parameter_setting</field>
@@ -58,12 +56,10 @@
         <p class="oe_view_nocontent_create">Create the first Connection Parameter Setting
         </p>
       </field>
-
     </record>
-
+	
     <!-- actions -->
     <menuitem name="Connection" id="connector_idempiere.conecction_parameter_setting" parent="connector_idempiere.setting"
               action="connector_idempiere_connection_parameter_setting_action_window"/>
-
-  </data>
+  	</data>
 </odoo>

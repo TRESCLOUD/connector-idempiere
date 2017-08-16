@@ -51,12 +51,14 @@
 	        <field name="model">sale.order</field>
 	        <field name="inherit_id" ref="sale.view_order_form"/>
 	        <field name="arch" type="xml">
+	            <xpath expr="//field[@name='note']" position="replace">
+	            </xpath>
 	            <xpath expr="//field[@name='payment_term_id']" position="after">                  
 	                <field name="idempiere_document_type_id" 
 	                	attrs="{'required': 0}"
 	                	options="{'no_create': True,'no_open': True}"/>
 	                <field name="delivery_policy" attrs="{'required': 0}"/>
-	                <field name="idempiere_sale_description" placeholder="Description for this sale, example: 'Printing equipment sale for project ABC'"/>/>
+	                <field name="note" placeholder="Description for this sale, example: 'Printing equipment sale for project ABC'"/>/>
 	                <button col="2" name="open_page" 
 	                		type="object" 
 	                		string="Ver en iDempiere"

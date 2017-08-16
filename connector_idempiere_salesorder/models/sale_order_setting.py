@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 
+
 #Configuration class of basic parameters for Sales Order synchronization
 class sale_order_setting(models.Model):
     _name = 'connector_idempiere_salesorder.sale_order_setting'

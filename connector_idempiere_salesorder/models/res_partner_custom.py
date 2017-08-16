@@ -5,6 +5,14 @@ import time
 
 from odoo import api, fields, models, _
 
+#forzamos la codificacion a utf-8
+#util para conversiones a string realizadas en el documento
+import sys
+from mx.DateTime.DateTime import today
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
 #Class inherited from res Partner
 class ResPartner(models.Model):
     _inherit = 'res.partner'

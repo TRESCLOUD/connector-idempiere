@@ -12,6 +12,7 @@ from idempierewsc.base import Field
 from idempierewsc.request import CompositeOperationRequest
 import traceback
 
+
 #Configuration class of basic parameters for Customer synchronization
 class customer_setting(models.Model):
     _name = 'connector_idempiere_bpartner.customer_setting'
@@ -132,18 +133,18 @@ class customer_setting(models.Model):
                   Field('City', str(address.city or '')),
                   Field('Postal', str(address.zip or '')),
                   ]
-        if address.city_id:
-            if not address.city_id.C_City_ID:
-                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.city_id.name)
-            locationFields.append(Field('C_City_ID', str(address.city_id.C_City_ID)))
-        if address.state_id:
-            if not address.state_id.C_Region_ID:
-                raise UserError(_('Error iDempiere: La provincia %s no tiene un id relacionado en iDempiere') % address.state_id.name)
-            locationFields.append(Field('C_Region_ID', str(address.state_id.C_Region_ID)))
-        if address.country_id:
-            if not address.country_id.C_Country_ID:
-                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
-            locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
+#         if address.city_id:
+#             if not address.city_id.C_City_ID:
+#                 raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.city_id.name)
+#             locationFields.append(Field('C_City_ID', str(address.city_id.C_City_ID)))
+#         if address.state_id:
+#             if not address.state_id.C_Region_ID:
+#                 raise UserError(_('Error iDempiere: La provincia %s no tiene un id relacionado en iDempiere') % address.state_id.name)
+#             locationFields.append(Field('C_Region_ID', str(address.state_id.C_Region_ID)))
+#         if address.country_id:
+#             if not address.country_id.C_Country_ID:
+#                 raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
+#             locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
         C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
         bpLocationFields= [Field('Name',  str(address.name)),
                            Field('C_Location_ID', C_Location_ID),
