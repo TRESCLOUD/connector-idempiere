@@ -30,7 +30,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/customer_setting.xml',
-
+        'views/res_users_view.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

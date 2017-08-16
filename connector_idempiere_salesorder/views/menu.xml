@@ -23,8 +23,10 @@
         	sequence="50"/>
 
         <menuitem action="product.product_template_action" 
-        	id="menu_product_template_action_idempiere" parent="connector_idempiere.menu_idempiere_setup" sequence="55" />
-
+        	id="menu_product_template_action_idempiere" 
+        	parent="connector_idempiere.menu_idempiere_setup" 
+        	sequence="55" />
+        
 	</data>
 </odoo>
             

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
 	<record id="connector_idempiere_salesorder_account_tax_form" model="ir.ui.view">

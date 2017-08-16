@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
   <data>
 
@@ -8,6 +9,18 @@
     <menuitem id="setting" name="End Points" parent="menu_root"/>
     
     <menuitem id="menu_idempiere_setup" name="Setup" parent="menu_root"/>
-
+    
+    <menuitem action="base.action_country"
+    		name="Países"
+			id="menu_action_country_form_idempiere" 
+			parent="connector_idempiere.menu_idempiere_setup" 
+			sequence="5"/>
+        
+	<menuitem action="base.action_country_state"
+			name="Provincias"
+			id="menu_action_country_state_form_action_idempiere" 
+			parent="connector_idempiere.menu_idempiere_setup" 
+			sequence="10"/>
+	
   </data>
 </odoo>

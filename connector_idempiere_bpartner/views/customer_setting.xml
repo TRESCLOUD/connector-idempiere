@@ -72,8 +72,16 @@
     </record>
 
     <!-- actions -->
-    <menuitem name="Customer" id="connector_idempiere_bpartner.customer_setting" parent="connector_idempiere.setting"
-              action="connector_idempiere_bpartner_setting_action_window"/>
+    <menuitem name="Customer" 
+    		id="connector_idempiere_bpartner.customer_setting" 
+    		parent="connector_idempiere.setting"
+            action="connector_idempiere_bpartner_setting_action_window"/>
+            
+    <menuitem name="Usuarios" 
+    		id="menu_action_users_conf_idempiere" 
+    		parent="connector_idempiere.menu_idempiere_setup"
+            action="base.action_res_users"
+            sequence="13"/>
 
   </data>
 </odoo>
