@@ -17,7 +17,6 @@ from idempierewsc.request import SetDocActionRequest
 from datetime import datetime, date, time, timedelta
 import traceback
 
-
 #Class inherited from Sales Order to implement the sending of Sales Orders to iDempiere after being confirmed in Odoo
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -47,7 +46,8 @@ class SaleOrder(models.Model):
                                                  help="iDempiere document, automatically sets the organization, warehouse, and other internal parameters", 
                                                  track_visibility='onchange',)
     
-    idempiere_sale_description = fields.Text(    'Sale Description', 
+    #redefinimos el campo note
+    note = fields.Text(                          'Sale Description', 
                                                  readonly=True, 
                                                  states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
                                                  help="Short description of this sale", 
@@ -87,7 +87,11 @@ class SaleOrder(models.Model):
     
     @api.multi
     def open_page(self):
-        connector_idempiere = self.env['connector_idempiere.connection_parameter_setting'].search([],limit=1)
+        '''
+        Abrimos la orden de venta en el cliente web de idempiere mediante un Zoom Action
+        ''' 
+        #usamos el superuser para acceder a los parametros de configuracion 
+        connector_idempiere = self.sudo().env['connector_idempiere.connection_parameter_setting'].search([],limit=1)
         if not self.c_order_id:
             return {
                     "type": "ir.actions.act_url",
@@ -116,27 +120,53 @@ class SaleOrder(models.Model):
         """
         self.ensure_one()
         res = super(SaleOrder, self).action_confirm()
-
         error_fields = []
+        #validamos que ciertos campos opcionales en vista por simplicidad de cotizaciones
+        #sean enviados al aprobar la venta
         for field in self.get_fields_required_idempiere():
             if not self[field]:
                 error_fields.append(self.fields_get([field], ['string'])[field]['string'])
-                
         if error_fields:
             raise UserError(_(u'Error: \n\nLos siguientes campos no están llenados, '
                               u'por favor elegir los datos de esos campos para '
                               u'continuar con la venta: \n- %s') % '\n- '.join(error_fields))
         print ('Synchronizing....')
-        synchronizer = sale_order_synchronizer()
-        idempiere_sale_id = synchronizer.synchronize_to_idempiere(self)
+        #usamos el superusuario para no dar acceso de lectura a la configuracion del
+        #webservice, 
+        idempiere_sale_id = self.sudo().synchronize_to_idempiere()
         if idempiere_sale_id==False:
             raise UserError(_('Error iDempiere: %s') % self.sync_message)
             message_body = "\n\n".join(self.sync_message)
             self.message_post(body=message_body, subject="Error")        
+            
         #si success retorno el id de la orden de venta en idempiere:
-        for order in self:
-            order.c_order_id = idempiere_sale_id
+        self.c_order_id = idempiere_sale_id
         return res
+    
+    def synchronize_to_idempiere(self):
+        """ Send the odoo's sales order to be registered in idempiere
+            :param sale.order order
+        """
+        print "synchronize_to_idempiere"
+        connection_parameter = self.env['connector_idempiere.connection_parameter_setting'].search([('idempiere_login_client_id', '>', '0')], limit=1)
+        if connection_parameter.id==False:
+            self.toSchedule(_("No Connection Setting"))
+            return False
+        customer_set = self.env['connector_idempiere_bpartner.customer_setting'].search([('read_bpartner_wst', '!=', '')], limit=1)
+        if customer_set.id==False:
+            self.toSchedule(_("No Customer Setting"))
+            return False
+        product_set = self.env['connector_idempiere_product.product_setting'].search([('read_product_wst', '!=', '')], limit=1)
+        if product_set.id==False:
+            self.toSchedule(_("No Product Setting"))
+            return False
+        saleorder_set = self.env['connector_idempiere_salesorder.sale_order_setting'].search([('idempiere_c_doctypetarget_id', '>', '0')], limit=1)
+        if saleorder_set.id==False:
+            self.toSchedule(_("No Sale Order Setting"))
+            return False
+        success_id = self.sendOrder(connection_parameter,self,product_set,saleorder_set,customer_set)
+        return success_id
+
 
     def toSchedule(self,message):
         """ Method to schedule a scheduled synchronization in case you can not synchronize online
@@ -205,11 +235,11 @@ class SaleOrder(models.Model):
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
                         Field('SalesRep_ID', 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
-                        Field('Description', self.idempiere_sale_description),
+                        Field('Description', self.note.decode('utf-8', 'ignore')),
                         Field('DeliveryRule', self.delivery_policy),
                         Field('DatePromised',datePromised_user),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',customer_reference),
+                        Field('POReference',customer_reference.decode('utf-8', 'ignore')),
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
@@ -222,8 +252,9 @@ class SaleOrder(models.Model):
         ws2lines = set()
 
         productNotFound = False
-
+        line_sequence = 0
         for line in order.order_line:
+            line_sequence += 10
             wsline = CreateDataRequest()
             wsline.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
 
@@ -248,9 +279,9 @@ class SaleOrder(models.Model):
                             Field('PriceActual', line.price_unit),
                             #Field('Discount', 0.0), #0% para el caso de uso
                             #Field('LineNetAmt',line.price_subtotal),
-                            Field('Line', line.sequence),
+                            Field('Line', line_sequence), #line.sequence
                             #Field('IsDiscountApplied', True),
-                            Field('Description', line.name),
+                            Field('Description', line.name.decode('utf-8', 'ignore')),
                             Field('DatePromised',datePromisedLine)
                             ])
             idempiere_extra_line_fields = line.idempiere_extra_line_fields()

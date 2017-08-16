@@ -97,16 +97,13 @@ class connection_parameter_setting(models.Model):
             wsc.print_xml_request()
             wsc.print_xml_response()
             if response.status == WebServiceResponseStatus.Error:
-                traceback.print_exc()
-        except:
-            traceback.print_exc()
-
-        #else:
-        for row in response.data_set:
-            for line in row:
-                if line.column == columnKeyName:
-                    recordID = int(line.value)
-
+                raise UserError(_('Error de conexion iDempiere %s') % response.error_message)
+            for row in response.data_set:
+                for line in row:
+                    if line.column == columnKeyName:
+                        recordID = int(line.value)
+        except Exception, e:
+            raise UserError('Error de conexion iDempiere: '+ str(e))
         return recordID
 
     def sendRegister(self,webServiceType,fields):
@@ -119,15 +116,10 @@ class connection_parameter_setting(models.Model):
         ws.login = self.getLogin()
         wsc = self.getWebServiceConnection()
         recordID = 0
-
         response = wsc.send_request(ws)
         wsc.print_xml_request()
         wsc.print_xml_response()
-
         if response.status == WebServiceResponseStatus.Error:
-            raise UserError(_('Error de conexion %s') % response.error_message)
-
-        if response.status != WebServiceResponseStatus.Error:
-            recordID = int(response.record_id)
-
+            raise UserError(_('Error de conexion iDempiere %s') % response.error_message)
+        recordID = int(response.record_id)
         return recordID

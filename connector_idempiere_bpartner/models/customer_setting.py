@@ -12,6 +12,7 @@ from idempierewsc.base import Field
 from idempierewsc.request import CompositeOperationRequest
 import traceback
 
+
 #Configuration class of basic parameters for Customer synchronization
 class customer_setting(models.Model):
     _name = 'connector_idempiere_bpartner.customer_setting'

@@ -9,11 +9,11 @@ from idempierewsc.enums import WebServiceResponseStatus
 import time
 import datetime
 import traceback
+from mx.DateTime.DateTime import today
 
 #forzamos la codificacion a utf-8
 #util para conversiones a string realizadas en el documento
 import sys
-from mx.DateTime.DateTime import today
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -105,8 +105,6 @@ class product_setting(models.Model):
             values = {}
             for field in row:
                 column = str(field.column).lower()
-                if field.value == 'MAT-456456':
-                    a=1
                 if str(column)==self.odoo_key_column_name:
                     key = str(field.value)
                 if str(column)=='category_name':
