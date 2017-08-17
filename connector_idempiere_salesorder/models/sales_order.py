@@ -235,11 +235,11 @@ class SaleOrder(models.Model):
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
                         Field('SalesRep_ID', 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
-                        Field('Description', self.note.decode('utf-8', 'ignore')),
+                        Field('Description', self.note or ''),
                         Field('DeliveryRule', self.delivery_policy),
                         Field('DatePromised',datePromised_user),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',customer_reference.decode('utf-8', 'ignore')),
+                        Field('POReference',customer_reference or ''),
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
@@ -281,7 +281,7 @@ class SaleOrder(models.Model):
                             #Field('LineNetAmt',line.price_subtotal),
                             Field('Line', line_sequence), #line.sequence
                             #Field('IsDiscountApplied', True),
-                            Field('Description', line.name.decode('utf-8', 'ignore')),
+                            Field('Description', line.name),
                             Field('DatePromised',datePromisedLine)
                             ])
             idempiere_extra_line_fields = line.idempiere_extra_line_fields()
