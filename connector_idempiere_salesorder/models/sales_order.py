@@ -40,7 +40,6 @@ class SaleOrder(models.Model):
     #columns
     idempiere_document_type_id = fields.Many2one('idempiere.document.type', 
                                                  string='Document', 
-                                                 required=True, 
                                                  readonly=True, 
                                                  states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, 
                                                  help="iDempiere document, automatically sets the organization, warehouse, and other internal parameters", 
