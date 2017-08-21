@@ -9,7 +9,7 @@ from idempierewsc.enums import WebServiceResponseStatus
 import time
 import datetime
 import traceback
-from mx.DateTime.DateTime import today
+#from mx.DateTime.DateTime import today
 
 #forzamos la codificacion a utf-8
 #util para conversiones a string realizadas en el documento

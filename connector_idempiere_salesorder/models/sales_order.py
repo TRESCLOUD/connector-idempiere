@@ -3,8 +3,8 @@
 
 from odoo import api, fields, models,tools, _
 from odoo.exceptions import UserError
-from sale_order_synchronizer import sale_order_synchronizer
-from odoo.exceptions import UserError
+#from sale_order_synchronizer import sale_order_synchronizer
+#from odoo.exceptions import UserErrorsale_order_synchronizer
 from idempierewsc.request import QueryDataRequest
 from idempierewsc.net import WebServiceConnection
 from idempierewsc.enums import WebServiceResponseStatus
@@ -61,6 +61,8 @@ class SaleOrder(models.Model):
     partner_invoice_id = fields.Many2one(        required=False)
     
     partner_shipping_id = fields.Many2one(       required=False)
+    commercial_partner_id = fields.Many2one(     related='partner_id.commercial_partner_id', string='Commercial Partner', 
+                                                 store=True, copy=False, index=True)
     
     contact_invoice_id = fields.Many2one(        'res.partner', 
                                                  string='Contact Invoice Address', 
