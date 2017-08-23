@@ -6,7 +6,7 @@
 
     <menuitem id="menu_root" name="iDempiere" groups="base.group_system"/>
 
-    <menuitem id="setting" name="End Points" parent="menu_root"/>
+    <menuitem id="setting" name="End Points" groups="base.group_system" parent="menu_root"/>
     
     <menuitem id="menu_idempiere_setup" name="Setup" parent="menu_root"/>
     

@@ -28,7 +28,7 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv', #removido para dar acceso solo al superusuario
+        'security/ir.model.access.csv', #removido para dar acceso solo al superusuario
         'views/menu.xml',
         'views/connection_parameter_setting.xml',
         'views/res_country_view.xml',

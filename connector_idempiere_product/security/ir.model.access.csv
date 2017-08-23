@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_connector-idempiere-product_connector-idempiere-product,connector-idempiere-product.connector-idempiere-product,model_connector-idempiere-product_connector-idempiere-product,,1,0,0,0
+access_connector-idempiere-product_connector-idempiere-product,connector-idempiere-product.connector-idempiere-product,connector_idempiere_product.model_connector_idempiere_product_product_setting,base.group_system,1,1,1,1
