@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_idempiere_document_type,idempiere.document.type,model_idempiere_document_type,sales_team.group_sale_salesman,1,0,0,0
+access_connector-idempiere-so-settings,connector-idempiere-so.connector-idempiere-so,connector_idempiere_salesorder.model_connector_idempiere_salesorder_sale_order_setting,base.group_system,1,1,1,1
