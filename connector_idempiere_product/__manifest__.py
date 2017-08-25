@@ -28,6 +28,7 @@
 
     # always loaded
     'data': [
+        'data/cron_data.xml',
         'security/ir.model.access.csv',
         'views/product_setting.xml',
         'views/product_custom.xml',
