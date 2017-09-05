@@ -8,7 +8,7 @@
             <field name="numbercall">-1</field>
             <field name="model">connector_idempiere_product.product_setting</field>
             <field name="nextcall">2017-08-23 23:39:07</field>
-            <field name="function">getproducts_from_idempiere</field>
+            <field name="function">get_all_products_from_idempiere</field>
         </record>
     </data>
 </odoo>
