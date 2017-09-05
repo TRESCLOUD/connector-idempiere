@@ -72,6 +72,15 @@ class product_setting(models.Model):
         product = self.env['product.template'].search([(self.odoo_key_column_name, '=', str(productvalue))], limit=1)
         return product
 
+    @api.multi
+    def get_all_products_from_idempiere(self):
+        """ Iterates by each product setup form and queries the related idempiere products
+        """
+        setups = self.search([]) #todos los registros
+        for setup in setups:
+            setup.getproducts_from_idempiere()
+
+    
     @api.one
     def getproducts_from_idempiere(self):
         """ Create or Update odoo products from idempiere product Through webservice with idempiere_filter applied
@@ -92,7 +101,8 @@ class product_setting(models.Model):
         ws.offset = 0
         ws.limit = self.limit
         ws.login = connection_parameter.getLogin()
-        ws.filter= self.idempiere_filter
+        if self.idempiere_filter:
+            ws.filter = self.idempiere_filter
         wsc = connection_parameter.getWebServiceConnection()
         response = wsc.send_request(ws)
         wsc.print_xml_request()
