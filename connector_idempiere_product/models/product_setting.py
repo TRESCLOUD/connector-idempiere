@@ -101,8 +101,8 @@ class product_setting(models.Model):
         ws.offset = 0
         ws.limit = self.limit
         ws.login = connection_parameter.getLogin()
-        if ws.filter:
-            ws.filter= self.idempiere_filter
+        if self.idempiere_filter:
+            ws.filter = self.idempiere_filter
         wsc = connection_parameter.getWebServiceConnection()
         response = wsc.send_request(ws)
         wsc.print_xml_request()
