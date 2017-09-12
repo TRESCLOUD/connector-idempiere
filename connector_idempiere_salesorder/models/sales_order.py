@@ -323,7 +323,10 @@ class SaleOrder(models.Model):
 
         wsc = connection_parameter.getWebServiceConnection()
 
-        response = wsc.send_request(ws0)
+        try:
+            response = wsc.send_request(ws0)
+        except Exception, e:
+            raise UserError(_('Error iDempiere: %s') % e.message)
         wsc.print_xml_request()
         wsc.print_xml_response()
 
