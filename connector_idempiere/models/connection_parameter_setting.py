@@ -116,7 +116,10 @@ class connection_parameter_setting(models.Model):
         ws.login = self.getLogin()
         wsc = self.getWebServiceConnection()
         recordID = 0
-        response = wsc.send_request(ws)
+        try:
+            response = wsc.send_request(ws)
+        except Exception, e:
+            raise UserError(_('Error iDempiere: %s') % e.message)
         wsc.print_xml_request()
         wsc.print_xml_response()
         if response.status == WebServiceResponseStatus.Error:

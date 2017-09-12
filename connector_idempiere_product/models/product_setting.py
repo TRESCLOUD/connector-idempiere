@@ -59,8 +59,8 @@ class product_setting(models.Model):
                 for row in response.data_set:
                     productID = int(row[0].value)
 
-        except:
-            traceback.print_exc()
+        except Exception, e:
+            raise UserError(_('Error iDempiere: %s') % e.message)
 
         return productID
 
@@ -104,7 +104,11 @@ class product_setting(models.Model):
         if self.idempiere_filter:
             ws.filter = self.idempiere_filter
         wsc = connection_parameter.getWebServiceConnection()
-        response = wsc.send_request(ws)
+        try:
+            response = wsc.send_request(ws)
+        except Exception, e:
+            raise UserError(_('Error iDempiere: %s') % e.message)
+
         wsc.print_xml_request()
         wsc.print_xml_response()
         if response.status == WebServiceResponseStatus.Error:
