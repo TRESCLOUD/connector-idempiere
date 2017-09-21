@@ -269,15 +269,17 @@ class SaleOrder(models.Model):
                 daysPromised = int(line.customer_lead)
             daysPromised = timedelta(days=daysPromised)
             datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
+            price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
+            qty_ordered = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
             wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                             Field('C_Order_ID', '@C_Order.C_Order_ID'),
                             Field('M_Product_ID', productID),
                             Field('QtyEntered', line.product_uom_qty),
-                            Field('QtyOrdered', line.product_uom_qty),
+                            Field('QtyOrdered', qty_ordered),
                             Field('C_UOM_ID',line.product_uom.c_uom_id),
                             Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
-                            Field('PriceList', line.price_unit),
-                            Field('PriceActual', line.price_unit),
+                            Field('PriceList', price_unit),
+                            Field('PriceActual', price_unit),
                             #Field('Discount', 0.0), #0% para el caso de uso
                             #Field('LineNetAmt',line.price_subtotal),
                             Field('Line', line_sequence), #line.sequence
