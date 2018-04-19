@@ -120,7 +120,7 @@ msgstr "Resultado"
 #. module: connector_idempiere_product
 #: model:ir.ui.view,arch_db:connector_idempiere_product.connector_idempiere_product_product_setting_form
 msgid "Update Product"
-msgstr "Producto Actualizado"
+msgstr "Actualizar Productos"
 
 #. module: connector_idempiere_product
 #: model:ir.model.fields,field_description:connector_idempiere_product.field_connector_idempiere_product_product_setting_read_product_wst

@@ -123,7 +123,10 @@ class product_setting(models.Model):
                     key = str(field.value)
                 if str(column)=='category_name':
                     column = 'categ_id'
+                    category_name = field.value
                     field.value = self.getCateg_id(str(field.value)) #TODO: Agregar el id de la categoria a Odoo para no buscar por nombre
+                    if not field.value:
+                        raise UserError(u'No existe la categoría %s, por favor crear en el sistema' % category_name)
                 if str(column)=='c_uom_id': #mapeamos el id de unidad de medida de idempiere al id de Odoo
                     uom = self.env['product.uom'].search([['c_uom_id', '=', field.value], ['active', '=', True]],limit=1)
                     if not uom:
@@ -168,7 +171,7 @@ class product_setting(models.Model):
             :param string category_name
             :return: id of product category
         """
-        catetory = self.env['product.category'].search([("name", "=", str(category_name))], limit=1)
+        catetory = self.env['product.category'].search([("name", "ilike", str(category_name))], limit=1)
         if catetory:
             return catetory.id
         return False

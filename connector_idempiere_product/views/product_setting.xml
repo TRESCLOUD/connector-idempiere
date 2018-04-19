@@ -21,8 +21,14 @@
         <form string="iDempiere Product Setting">
             <sheet>
                 <group>
-                    <field name="odoo_key_column_name"/>
-                    <field name="idempiere_key_column_name"/>
+                    <group>
+                        <field name="odoo_key_column_name"/>
+                        <field name="idempiere_key_column_name"/>
+                    </group>
+                    <group>
+                        <button name="getproducts_from_idempiere" string="Update Product" type="object"
+                                    class="oe_highlight"/>
+                    </group>
                 </group>
                 <notebook>
                     <page string="Read">
@@ -36,8 +42,6 @@
                             <field name="limit"/>
                             <field name="idempiere_filter"/>
                             <field name="result"/>
-                            <button name="getproducts_from_idempiere" string="Update Product" type="object"
-                                    class="oe_highlight"/>
                         </group>
                     </page>
                 </notebook>
