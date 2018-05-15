@@ -280,6 +280,7 @@ class SaleOrder(models.Model):
                             Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
                             Field('PriceList', price_unit),
                             Field('PriceActual', price_unit),
+                            Field('C_Tax_ID', 1000679),
                             #Field('Discount', 0.0), #0% para el caso de uso
                             #Field('LineNetAmt',line.price_subtotal),
                             Field('Line', line_sequence), #line.sequence
@@ -302,6 +303,7 @@ class SaleOrder(models.Model):
                                 Field('C_Charge_ID', '1000586'), #Quemado en codigo
                                 Field('QtyEntered', 1.0),
                                 Field('QtyOrdered', 1.0),
+                                Field('C_Tax_ID', 1000679),
                                 Field('PriceEntered', (-1)*total_discount_amount),
                                 Field('PriceActual', (-1)*total_discount_amount),
                                 Field('Line', line.sequence + 5),
