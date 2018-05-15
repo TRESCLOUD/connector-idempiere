@@ -145,11 +145,12 @@ class customer_setting(models.Model):
             if not address.country_id.C_Country_ID:
                 raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
             locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
+        locationFields.append(Field('AD_Client_ID', str(connection.idempiere_login_client_id)))
         C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
         bpLocationFields= [Field('Name',  str(address.name)),
                            Field('C_Location_ID', C_Location_ID),
                            Field('C_BPartner_ID',c_bpartner_id),
-                           Field('IsBillTo','Y'), #Ambobs en Y porque Odoo no diferencia
+                           Field('IsBillTo','Y'), #Ambos en Y porque Odoo no diferencia
                            Field('IsShipTo','Y')]
         C_BPartner_Location_ID = connection.sendRegister(self.create_bplocation_wst,bpLocationFields)
         return C_BPartner_Location_ID
