@@ -48,7 +48,7 @@ class customer_setting(models.Model):
             :return: iDempiere's AD_User_ID of Contact
         """
         #si el nombre coincide exactamente, y si el parent_id apunta al al mismo.
-        filter = "Name = '" + str(contact.name) \
+        filter = "Name = '" + str(contact.name.replace('\'', '').replace('\"','')) \
                  + "' AND C_BPartner_ID = "+str(c_bpartner_id) \
                  + " AND IsActive = 'Y'"
         AD_User_ID = connection.getRecordID(self.read_contact_wst,filter,'AD_User_ID')
@@ -94,7 +94,7 @@ class customer_setting(models.Model):
         fields = [Field('Name',  str(partner.name)),
                   Field('Value', str(partner.vat)),
                   Field('TaxID', str(partner.vat)),
-                  Field('C_BP_Group_ID', str(partner.partner_category_id.c_bp_group_id)), 
+                  Field('C_BP_Group_ID', str(partner.partner_category_id.c_bp_group_id)),
                   Field('SalesRep_ID', str(partner.user_id.ad_user_id)),
                   ]
         C_BPartner_ID = connection.sendRegister(self.create_bpartner_wst,fields)
@@ -108,7 +108,7 @@ class customer_setting(models.Model):
             :param int c_bpartner_id (Parent ID)
             :return: int New AD_User_ID
         """
-        fields = [Field('Name',  str(contact.name)),
+        fields = [Field('Name',  str(contact.name.replace('\'', '').replace('\"',''))),
                   Field('Description', str(contact.function or '')),
                   Field('EMail', str(contact.email or '')),
                   Field('Phone', str(contact.phone or '')),
