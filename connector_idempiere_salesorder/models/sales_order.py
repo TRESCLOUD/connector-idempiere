@@ -82,6 +82,7 @@ class SaleOrder(models.Model):
                                                  copy=False,
                                                  help='Show the related ID from iDempiere',
                                                  track_visibility='onchange',)
+    create_address = fields.Boolean(string='Create Address', default=False)
     #TODO: Implementar estos campos
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
     sync_message = fields.Char('Sync message',default='')
@@ -213,11 +214,11 @@ class SaleOrder(models.Model):
                 deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
                 self.contact_shipping_id.C_Idempiere_ID = deliveryContact
         #direcciones
-        invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+        invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID, order.create_address)
         if invoiceAddress == 0:
             invoiceAddress = customer_setting.createAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
             self.partner_invoice_id.C_Idempiere_ID = invoiceAddress 
-        deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
+        deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID, order.create_address)
         if deliveryAddress == 0:
             if self.partner_shipping_id == self.partner_invoice_id:
                  deliveryAddress = invoiceAddress
@@ -234,17 +235,18 @@ class SaleOrder(models.Model):
                         Field('C_BPartner_ID', C_BPartner_ID),
                         Field('DateOrdered', dateOrdered_user),
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
-                        Field('SalesRep_ID', 100),
+                        Field('SalesRep_ID', self.env.user.ad_user_id or 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
                         Field('Description', self.note or ''),
                         Field('DeliveryRule', self.delivery_policy),
-                        Field('DatePromised',datePromised_user),
+                        Field('DatePromised', datePromised_user),
                         Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
                         Field('POReference',customer_reference or ''),
                         Field('AD_User_ID',deliveryContact),
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
                         Field('Bill_Location_ID',invoiceAddress),
+                        Field('InvoiceRule', 'D'),
                         Field('Bill_BPartner_ID',C_BPartner_ID)]
         idempiere_extra_header_fields = self.idempiere_extra_header_fields()
         if idempiere_extra_header_fields:

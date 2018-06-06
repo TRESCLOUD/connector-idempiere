@@ -527,3 +527,8 @@ msgstr "idempiere.document.type"
 #: model:ir.ui.view,arch_db:connector_idempiere_salesorder.partner_contact_or_address_form
 msgid "internal note..."
 msgstr "Nota interna..."
+
+#. module: connector_idempiere_salesorder
+#: model:ir.model.fields,field_description:connector_idempiere_salesorder.field_sale_order_create_address
+msgid "Create Address"
+msgstr "Crear nueva dirección"

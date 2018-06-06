@@ -54,7 +54,7 @@ class customer_setting(models.Model):
         AD_User_ID = connection.getRecordID(self.read_contact_wst,filter,'AD_User_ID')
         return AD_User_ID
 
-    def getInvoiceAddressID(self,connection,address,c_bpartner_id):
+    def getInvoiceAddressID(self,connection,address,c_bpartner_id,create_address):
         """ Obtain the idempiere record identifier (C_BPartner_Location) of a Invoice customer'address associated with an odoo sales order
             :param connection_parameter_setting connection
             :param res.partner address (Type = Delivery)
@@ -66,9 +66,18 @@ class customer_setting(models.Model):
                  + " AND IsBillTo = 'Y'" \
                  + " AND IsActive = 'Y'"
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
+        if not C_BPartner_Location_ID:
+            filter = "C_BPartner_ID = " + str(c_bpartner_id) \
+                     + " AND IsBillTo = 'Y'" \
+                     + " AND IsActive = 'Y'"
+            C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst, filter, 'C_BPartner_Location_ID')
+            if C_BPartner_Location_ID and not create_address:
+                raise UserError('El cliente ya tiene una dirección por favor verifique en Idempiere o tilde crear nueva dirección')
+            elif C_BPartner_Location_ID and create_address:
+                C_BPartner_Location_ID = 0
         return C_BPartner_Location_ID
 
-    def getDeliveryAddressID(self,connection,address,c_bpartner_id):
+    def getDeliveryAddressID(self,connection,address,c_bpartner_id,create_address):
         """ Obtain the idempiere record identifier (C_BPartner_Location) of a Delivery customer'address associated with an odoo sales order
             :param connection_parameter_setting connection
             :param res.partner address (Type = Delivery)
@@ -80,7 +89,15 @@ class customer_setting(models.Model):
                  + " AND IsShipTo = 'Y'" \
                  + " AND IsActive = 'Y'"
         C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst,filter,'C_BPartner_Location_ID')
-
+        if not C_BPartner_Location_ID:
+            filter = "C_BPartner_ID = " + str(c_bpartner_id) \
+                     + " AND IsShipTo = 'Y'" \
+                     + " AND IsActive = 'Y'"
+            C_BPartner_Location_ID = connection.getRecordID(self.read_bplocation_wst, filter, 'C_BPartner_Location_ID')
+            if C_BPartner_Location_ID and not create_address:
+                raise UserError('El cliente ya tiene una dirección por favor verifique en Idempiere o tilde crear nueva dirección')
+            elif C_BPartner_Location_ID and create_address:
+                C_BPartner_Location_ID = 0
         return C_BPartner_Location_ID
 
 
@@ -108,6 +125,8 @@ class customer_setting(models.Model):
             :param int c_bpartner_id (Parent ID)
             :return: int New AD_User_ID
         """
+        if not contact.email:
+            raise UserError('Debe especificar un email al contacto.')
         fields = [Field('Name',  str(contact.name.replace('\'', '').replace('\"',''))),
                   Field('Description', str(contact.function or '')),
                   Field('EMail', str(contact.email or '')),
@@ -127,7 +146,16 @@ class customer_setting(models.Model):
             :param int c_bpartner_id
             :return: int New C_BPartner_Location_ID
         """
-        locationFields = [
+        locationFields = []
+        if address.state_id:
+            if not address.state_id.C_Region_ID:
+                raise UserError(_('Error iDempiere: La provincia %s no tiene un id relacionado en iDempiere') % address.state_id.name)
+            locationFields.append(Field('C_Region_ID', str(address.state_id.C_Region_ID)))
+        if address.country_id:
+            if not address.country_id.C_Country_ID:
+                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
+            locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
+        locationFields += [
                   Field('Address1', str(address.street or '')),
                   Field('Address2', str(address.street2 or '')),
                   Field('City', str(address.city or '')),
@@ -137,14 +165,6 @@ class customer_setting(models.Model):
             if not address.city_id.C_City_ID:
                 raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.city_id.name)
             locationFields.append(Field('C_City_ID', str(address.city_id.C_City_ID)))
-        if address.state_id:
-            if not address.state_id.C_Region_ID:
-                raise UserError(_('Error iDempiere: La provincia %s no tiene un id relacionado en iDempiere') % address.state_id.name)
-            locationFields.append(Field('C_Region_ID', str(address.state_id.C_Region_ID)))
-        if address.country_id:
-            if not address.country_id.C_Country_ID:
-                raise UserError(_('Error iDempiere: La ciudad %s no tiene un id relacionado en iDempiere') % address.country_id.name)
-            locationFields.append(Field('C_Country_ID', str(address.country_id.C_Country_ID)))
         locationFields.append(Field('AD_Client_ID', str(connection.idempiere_login_client_id)))
         C_Location_ID = connection.sendRegister(self.create_location_wst,locationFields)
         bpLocationFields= [Field('Name',  str(address.name)),
