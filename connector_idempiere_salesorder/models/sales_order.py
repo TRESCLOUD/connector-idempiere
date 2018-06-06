@@ -246,6 +246,7 @@ class SaleOrder(models.Model):
                         Field('Bill_User_ID',invoiceContact),
                         Field('C_BPartner_Location_ID',deliveryAddress),
                         Field('Bill_Location_ID',invoiceAddress),
+                        Field('InvoiceRule', 'D'),
                         Field('Bill_BPartner_ID',C_BPartner_ID)]
         idempiere_extra_header_fields = self.idempiere_extra_header_fields()
         if idempiere_extra_header_fields:
