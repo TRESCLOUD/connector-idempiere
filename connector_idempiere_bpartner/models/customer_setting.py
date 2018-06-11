@@ -108,9 +108,12 @@ class customer_setting(models.Model):
             :return: int New C_BPartner_ID
         """
         #WebService to create the customer
+        if not partner.partner_identification_id:
+            raise UserError('No ha especificado un tipo de identificación al cliente')
         fields = [Field('Name',  str(partner.name)),
                   Field('Value', str(partner.vat)),
                   Field('TaxID', str(partner.vat)),
+                  Field('LCO_TaxIdType_ID', str(partner.partner_identification_id.c_idempiere_id)),
                   Field('C_BP_Group_ID', str(partner.partner_category_id.c_bp_group_id)),
                   Field('SalesRep_ID', str(partner.user_id.ad_user_id)),
                   ]
