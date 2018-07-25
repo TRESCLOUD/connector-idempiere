@@ -235,7 +235,7 @@ class SaleOrder(models.Model):
                         Field('C_BPartner_ID', C_BPartner_ID),
                         Field('DateOrdered', dateOrdered_user),
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
-                        Field('SalesRep_ID', self.env.user.ad_user_id or 100),
+                        Field('SalesRep_ID', self.user_id.ad_user_id or self.env.user.ad_user_id or 100),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
                         Field('Description', self.note or ''),
                         Field('DeliveryRule', self.delivery_policy),
