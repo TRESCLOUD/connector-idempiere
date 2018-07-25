@@ -229,13 +229,15 @@ class SaleOrder(models.Model):
         customer_reference = self.name
         if self.client_order_ref:
             customer_reference += "-"+self.client_order_ref 
+        if not self.user_id.ad_user_id:
+            raise UserError(u'Comercial no tiene asignado un AD_User_ID correcto.')
         ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
                         Field('C_Currency_ID', 100), #TODO Incorporar multimoneda
                         Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
                         Field('C_BPartner_ID', C_BPartner_ID),
                         Field('DateOrdered', dateOrdered_user),
                         Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
-                        Field('SalesRep_ID', self.user_id.ad_user_id or self.env.user.ad_user_id or 100),
+                        Field('SalesRep_ID', self.user_id.ad_user_id),
                         Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
                         Field('Description', self.note or ''),
                         Field('DeliveryRule', self.delivery_policy),
