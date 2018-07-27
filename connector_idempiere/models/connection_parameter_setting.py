@@ -106,6 +106,21 @@ class connection_parameter_setting(models.Model):
             raise UserError('Error de conexion iDempiere: '+ str(e))
         return recordID
 
+    def getSetRecordData(self, webServiceType, filter, limit):
+        data = False
+        ws = self.getQueryDataRequestWebService(webServiceType, self.getLogin(), filter, limit)
+        wsc = self.getWebServiceConnection()
+        try:
+            response = wsc.send_request(ws)
+            wsc.print_xml_request()
+            wsc.print_xml_response()
+            if response.status == WebServiceResponseStatus.Error:
+                raise UserError(_('Error de conexion iDempiere %s') % response.error_message)
+            data = response.data_set
+        except Exception, e:
+            raise UserError('Error de conexion iDempiere: ' + str(e))
+        return data
+
     def sendRegister(self,webServiceType,fields):
         """ Send the customer to be registered in idempiere
             :param connection_parameter_setting connection

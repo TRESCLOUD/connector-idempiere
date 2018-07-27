@@ -21,14 +21,15 @@
       <field name="model">connector_idempiere_salesorder.sale_order_setting</field>
       <field name="arch" type="xml">
         <form string="iDempiere Sale Order Setting">
-            <sheet>
-              <group name="settings" string="Settings" >
-                <group>
-                  <field name="idempiere_c_doctypetarget_id"/>
-                  <field name="idempiere_ad_org_id"/>
-                  <field name="idempiere_m_warehouse_id"/>
-                  <field name="idempiere_m_pricelist_id"/>
-                </group>
+          <sheet>
+            <group name="settings" string="Settings" >
+              <field name="idempiere_c_doctypetarget_id"/>
+              <field name="idempiere_ad_org_id"/>
+              <field name="idempiere_m_warehouse_id"/>
+              <field name="idempiere_m_pricelist_id"/>
+            </group>
+            <notebook>
+              <page string="Create">
                 <group>
                   <field name="idempiere_customer_web_service_type"/>
                   <field name="idempiere_order_web_service_type"/>
@@ -36,9 +37,16 @@
                   <field name="idempiere_docaction_web_service_type"/>
                   <field name="idempiere_composite_web_service_type"/>
                 </group>
-              </group>
-
-            </sheet>
+              </page>
+              <page string="Read">
+                <group>
+                  <field name="read_order_wst"/>
+                  <field name="read_order_lines_wst"/>
+                   <field name="read_order_contact_wst"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
         </form>
       </field>
     </record>
