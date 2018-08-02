@@ -82,6 +82,11 @@ class SaleOrder(models.Model):
                                                  copy=False,
                                                  help='Show the related ID from iDempiere',
                                                  track_visibility='onchange',)
+    quotation_id = fields.Integer("Quotation ID from iDempiere",
+                                readonly=True,
+                                copy=False,
+                                help='Show the related Quotation ID from iDempiere',
+                                track_visibility='onchange',)
     create_address = fields.Boolean(string='Create Address', default=False)
     #TODO: Implementar estos campos
     scheduled = fields.Boolean('Scheduled for later sync',default=False)
@@ -105,6 +110,26 @@ class SaleOrder(models.Model):
                 "url": url,
                 "target": "new",
                 }
+
+    @api.multi
+    def open_page_quotation(self):
+        '''
+        Abrimos la orden de venta en el cliente web de idempiere mediante un Zoom Action
+        '''
+        # usamos el superuser para acceder a los parametros de configuracion
+        connector_idempiere = self.sudo().env['connector_idempiere.connection_parameter_setting'].search([], limit=1)
+        if not self.c_order_id:
+            return {
+                "type": "ir.actions.act_url",
+                "url": "#",
+            }
+        url = connector_idempiere.idempiere_url + '/webui/?Action=Zoom&TableName=C_Order&Record_ID=' + str(
+            self.quotation_id)
+        return {
+            "type": "ir.actions.act_url",
+            "url": url,
+            "target": "new",
+        }
 
 
     @api.multi
