@@ -161,13 +161,14 @@ class SaleOrder(models.Model):
         #usamos el superusuario para no dar acceso de lectura a la configuracion del
         #webservice, 
         idempiere_sale_id = self.sudo().synchronize_to_idempiere()
-        if idempiere_sale_id==False:
+        if idempiere_sale_id== -1:
             raise UserError(_('Error iDempiere: %s') % self.sync_message)
             message_body = "\n\n".join(self.sync_message)
             self.message_post(body=message_body, subject="Error")        
             
         #si success retorno el id de la orden de venta en idempiere:
-        self.c_order_id = idempiere_sale_id
+        if idempiere_sale_id > 0:
+            self.c_order_id = idempiere_sale_id
         return res
     
     def synchronize_to_idempiere(self):
@@ -214,162 +215,170 @@ class SaleOrder(models.Model):
     def sendOrder(self,connection_parameter,order,product_setting,sales_order_setting,customer_setting):
         """Sent from the header and lines of a Sales Order to iDempiere and execution of the action of the complete document.
         """
-        ws1 = CreateDataRequest()
-        ws1.web_service_type = sales_order_setting.idempiere_order_web_service_type
-
-        dateOrdered = fields.Datetime.from_string(self.confirmation_date)
-        dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
-        datePromised = fields.Datetime.from_string(self.commitment_date)
-        datePromised_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,datePromised)))
-        #business partner
-        C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
-        if C_BPartner_ID == 0:
-           C_BPartner_ID =  customer_setting.createBPartner(connection_parameter,order.partner_id)
-           self.partner_id.C_Idempiere_ID = C_BPartner_ID 
-        #contactos
-        invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
-        if invoiceContact==0:
-            invoiceContact = customer_setting.createContact(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
-            self.contact_invoice_id.C_Idempiere_ID = invoiceContact 
-        deliveryContact = customer_setting.getContactID(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
-        if deliveryContact==0:
-            if self.contact_shipping_id == self.contact_invoice_id: #cuando el contacto es el mismo no lo creamos dos veces
-                deliveryContact = invoiceContact
-            else:
-                deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
-                self.contact_shipping_id.C_Idempiere_ID = deliveryContact
-        #direcciones
-        invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID, order.create_address)
-        if invoiceAddress == 0:
-            invoiceAddress = customer_setting.createAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
-            self.partner_invoice_id.C_Idempiere_ID = invoiceAddress 
-        deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID, order.create_address)
-        if deliveryAddress == 0:
-            if self.partner_shipping_id == self.partner_invoice_id:
-                 deliveryAddress = invoiceAddress
-            else: 
-                deliveryAddress = customer_setting.createAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
-                self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
-        #referencia de cliente
-        customer_reference = self.name
-        if self.client_order_ref:
-            customer_reference += "-"+self.client_order_ref 
-        if not self.user_id.ad_user_id:
-            raise UserError(u'Comercial no tiene asignado un AD_User_ID correcto.')
-        ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
-                        Field('C_Currency_ID', 100), #TODO Incorporar multimoneda
-                        Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
-                        Field('C_BPartner_ID', C_BPartner_ID),
-                        Field('DateOrdered', dateOrdered_user),
-                        Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
-                        Field('SalesRep_ID', self.user_id.ad_user_id),
-                        Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
-                        Field('Description', self.note or ''),
-                        Field('DeliveryRule', self.delivery_policy),
-                        Field('DatePromised', datePromised_user),
-                        Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
-                        Field('POReference',customer_reference or ''),
-                        Field('AD_User_ID',deliveryContact),
-                        Field('Bill_User_ID',invoiceContact),
-                        Field('C_BPartner_Location_ID',deliveryAddress),
-                        Field('Bill_Location_ID',invoiceAddress),
-                        Field('InvoiceRule', 'D'),
-                        Field('Bill_BPartner_ID',C_BPartner_ID)]
-        idempiere_extra_header_fields = self.idempiere_extra_header_fields()
-        if idempiere_extra_header_fields:
-            ws1.data_row.extend(idempiere_extra_header_fields) 
-
-        ws2lines = set()
-
-        productNotFound = False
-        line_sequence = 0
+        create_order = False
+        C_Order_ID = 0
         for line in order.order_line:
-            line_sequence += 10
-            wsline = CreateDataRequest()
-            wsline.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
+            if not line.c_orderline_id:
+                create_order = True
+                break
+        if create_order:
+            ws1 = CreateDataRequest()
+            ws1.web_service_type = sales_order_setting.idempiere_order_web_service_type
 
-            productID = product_setting.getProductID(connection_parameter,line.product_id.default_code)
-            if not productID > 0:
-                order.toSchedule(_("Product Not Found")+ " " + str(line.product_id.default_code))
-                return False
+            dateOrdered = fields.Datetime.from_string(self.confirmation_date)
+            dateOrdered_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,dateOrdered)))
+            datePromised = fields.Datetime.from_string(self.commitment_date)
+            datePromised_user = fields.Datetime.to_string((fields.Datetime.context_timestamp(self,datePromised)))
+            #business partner
+            C_BPartner_ID = customer_setting.getCustomerID(connection_parameter,order.partner_id)
+            if C_BPartner_ID == 0:
+               C_BPartner_ID =  customer_setting.createBPartner(connection_parameter,order.partner_id)
+               self.partner_id.C_Idempiere_ID = C_BPartner_ID
+            #contactos
+            invoiceContact = customer_setting.getContactID(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
+            if invoiceContact==0:
+                invoiceContact = customer_setting.createContact(connection_parameter,self.contact_invoice_id,C_BPartner_ID)
+                self.contact_invoice_id.C_Idempiere_ID = invoiceContact
+            deliveryContact = customer_setting.getContactID(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+            if deliveryContact==0:
+                if self.contact_shipping_id == self.contact_invoice_id: #cuando el contacto es el mismo no lo creamos dos veces
+                    deliveryContact = invoiceContact
+                else:
+                    deliveryContact=customer_setting.createContact(connection_parameter,self.contact_shipping_id,C_BPartner_ID)
+                    self.contact_shipping_id.C_Idempiere_ID = deliveryContact
+            #direcciones
+            invoiceAddress = customer_setting.getInvoiceAddressID(connection_parameter,order.partner_invoice_id,C_BPartner_ID, order.create_address)
+            if invoiceAddress == 0:
+                invoiceAddress = customer_setting.createAddress(connection_parameter,order.partner_invoice_id,C_BPartner_ID)
+                self.partner_invoice_id.C_Idempiere_ID = invoiceAddress
+            deliveryAddress = customer_setting.getDeliveryAddressID(connection_parameter,order.partner_shipping_id,C_BPartner_ID, order.create_address)
+            if deliveryAddress == 0:
+                if self.partner_shipping_id == self.partner_invoice_id:
+                     deliveryAddress = invoiceAddress
+                else:
+                    deliveryAddress = customer_setting.createAddress(connection_parameter,order.partner_shipping_id,C_BPartner_ID)
+                    self.partner_shipping_id.C_Idempiere_ID = deliveryAddress
+            #referencia de cliente
+            customer_reference = self.name
+            if self.client_order_ref:
+                customer_reference += "-"+self.client_order_ref
+            if not self.user_id.ad_user_id:
+                raise UserError(u'Comercial no tiene asignado un AD_User_ID correcto.')
+            ws1.data_row = [Field('C_DocTypeTarget_ID', self.idempiere_document_type_id.c_doctype_id),
+                            Field('C_Currency_ID', 100), #TODO Incorporar multimoneda
+                            Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
+                            Field('C_BPartner_ID', C_BPartner_ID),
+                            Field('DateOrdered', dateOrdered_user),
+                            Field('M_Warehouse_ID', self.idempiere_document_type_id.m_warehouse_id),
+                            Field('SalesRep_ID', self.user_id.ad_user_id),
+                            Field('M_PriceList_ID', sales_order_setting.idempiere_m_pricelist_id),
+                            Field('Description', self.note or ''),
+                            Field('DeliveryRule', self.delivery_policy),
+                            Field('DatePromised', datePromised_user),
+                            Field('C_PaymentTerm_ID',order.payment_term_id.C_PaymentTerm_ID),
+                            Field('POReference',customer_reference or ''),
+                            Field('AD_User_ID',deliveryContact),
+                            Field('Bill_User_ID',invoiceContact),
+                            Field('C_BPartner_Location_ID',deliveryAddress),
+                            Field('Bill_Location_ID',invoiceAddress),
+                            Field('InvoiceRule', 'D'),
+                            Field('Bill_BPartner_ID',C_BPartner_ID)]
+            idempiere_extra_header_fields = self.idempiere_extra_header_fields()
+            if idempiere_extra_header_fields:
+                ws1.data_row.extend(idempiere_extra_header_fields)
 
-            daysPromised = 0
-            if line.customer_lead:
-                daysPromised = int(line.customer_lead)
-            daysPromised = timedelta(days=daysPromised)
-            datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
-            price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
-            qty_ordered = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
-            wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
-                            Field('C_Order_ID', '@C_Order.C_Order_ID'),
-                            Field('M_Product_ID', productID),
-                            Field('QtyEntered', line.product_uom_qty),
-                            Field('QtyOrdered', qty_ordered),
-                            Field('C_UOM_ID',line.product_uom.c_uom_id),
-                            Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
-                            Field('PriceList', price_unit),
-                            Field('PriceActual', price_unit),
-                            Field('C_Tax_ID', 1000679),
-                            #Field('Discount', 0.0), #0% para el caso de uso
-                            #Field('LineNetAmt',line.price_subtotal),
-                            Field('Line', line_sequence), #line.sequence
-                            #Field('IsDiscountApplied', True),
-                            Field('Description', line.name),
-                            Field('DatePromised',datePromisedLine)
-                            ])
-            idempiere_extra_line_fields = line.idempiere_extra_line_fields()
-            if idempiere_extra_line_fields:
-                wsline.data_row.extend(idempiere_extra_line_fields)
-            ws2lines.add(wsline)
-            if line.discount:
-                #creamos una segunda linea con el producto de descuento
-                wsline_discount = CreateDataRequest()
-                wsline_discount.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
+            ws2lines = set()
 
-                total_discount_amount = line.product_uom_qty*line.price_unit - line.price_subtotal
-                wsline_discount.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
-                                Field('C_Order_ID', '@C_Order.C_Order_ID'),
-                                Field('C_Charge_ID', '1000586'), #Quemado en codigo
-                                Field('QtyEntered', 1.0),
-                                Field('QtyOrdered', 1.0),
-                                Field('C_Tax_ID', 1000679),
-                                Field('PriceEntered', (-1)*total_discount_amount),
-                                Field('PriceActual', (-1)*total_discount_amount),
-                                Field('Line', line.sequence + 5),
-                                ])
-                ws2lines.add(wsline_discount)
+            productNotFound = False
+            line_sequence = 0
+            for line in order.order_line:
+                if not line.c_orderline_id:
+                    line_sequence += 10
+                    wsline = CreateDataRequest()
+                    wsline.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
 
-        #ws3 = SetDocActionRequest()
-        #ws3.web_service_type = sales_order_setting.idempiere_docaction_web_service_type
-        #ws3.doc_action = DocAction.Complete
-        #ws3.record_id_variable = '@C_Order.C_Order_ID'
-        #ws3.record_id = 0
-        ws0 = CompositeOperationRequest()
-        ws0.login = connection_parameter.getLogin()
-        ws0.operations.append(Operation(ws1))
+                    productID = product_setting.getProductID(connection_parameter,line.product_id.default_code)
+                    if not productID > 0:
+                        order.toSchedule(_("Product Not Found")+ " " + str(line.product_id.default_code))
+                        return -1
 
-        for wline in ws2lines:
-            ws0.operations.append(Operation(wline))
+                    daysPromised = 0
+                    if line.customer_lead:
+                        daysPromised = int(line.customer_lead)
+                    daysPromised = timedelta(days=daysPromised)
+                    datePromisedLine = fields.Datetime.context_timestamp(self,dateOrdered) + daysPromised
+                    price_unit = line.product_uom._compute_price(line.price_unit, line.product_id.uom_id)
+                    qty_ordered = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
+                    wsline.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
+                                    Field('C_Order_ID', '@C_Order.C_Order_ID'),
+                                    Field('M_Product_ID', productID),
+                                    Field('QtyEntered', line.product_uom_qty),
+                                    Field('QtyOrdered', qty_ordered),
+                                    Field('C_UOM_ID',line.product_uom.c_uom_id),
+                                    Field('PriceEntered', line.price_unit), #podria usarse el price_reduce, pero para el caso de uso esta bien price_unit
+                                    Field('PriceList', line.price_unit),
+                                    Field('PriceActual', line.price_unit),
+                                    Field('C_Tax_ID', 1000679),
+                                    #Field('Discount', 0.0), #0% para el caso de uso
+                                    #Field('LineNetAmt',line.price_subtotal),
+                                    Field('Line', line_sequence), #line.sequence
+                                    #Field('IsDiscountApplied', True),
+                                    Field('Description', line.name),
+                                    Field('DatePromised',datePromisedLine)
+                                    ])
+                    idempiere_extra_line_fields = line.idempiere_extra_line_fields()
+                    if idempiere_extra_line_fields:
+                        wsline.data_row.extend(idempiere_extra_line_fields)
+                    ws2lines.add(wsline)
+                    if line.discount:
+                        #creamos una segunda linea con el producto de descuento
+                        wsline_discount = CreateDataRequest()
+                        wsline_discount.web_service_type = sales_order_setting.idempiere_orderline_web_service_type
 
-        #ws0.operations.append(Operation(ws3))
-        ws0.web_service_type = sales_order_setting.idempiere_composite_web_service_type
+                        total_discount_amount = line.product_uom_qty*line.price_unit - line.price_subtotal
+                        wsline_discount.data_row =([Field('AD_Org_ID', self.idempiere_document_type_id.ad_org_id),
+                                        Field('C_Order_ID', '@C_Order.C_Order_ID'),
+                                        Field('C_Charge_ID', '1000586'), #Quemado en codigo
+                                        Field('QtyEntered', 1.0),
+                                        Field('QtyOrdered', 1.0),
+                                        Field('C_Tax_ID', 1000679),
+                                        Field('PriceEntered', (-1)*total_discount_amount),
+                                        Field('PriceActual', (-1)*total_discount_amount),
+                                        Field('Line', line.sequence + 5),
+                                        ])
+                        ws2lines.add(wsline_discount)
 
-        wsc = connection_parameter.getWebServiceConnection()
+            #ws3 = SetDocActionRequest()
+            #ws3.web_service_type = sales_order_setting.idempiere_docaction_web_service_type
+            #ws3.doc_action = DocAction.Complete
+            #ws3.record_id_variable = '@C_Order.C_Order_ID'
+            #ws3.record_id = 0
+            ws0 = CompositeOperationRequest()
+            ws0.login = connection_parameter.getLogin()
+            ws0.operations.append(Operation(ws1))
 
-        try:
-            response = wsc.send_request(ws0)
-        except Exception, e:
-            raise UserError(_('Error iDempiere: %s') % e.message)
-        wsc.print_xml_request()
-        wsc.print_xml_response()
+            for wline in ws2lines:
+                ws0.operations.append(Operation(wline))
 
-        if response.status == WebServiceResponseStatus.Error:
-            order.toSchedule(_(response.error_message))
-            return False
-        
-        #intentamos obtener el documento origen
-        C_Order_ID = response.responses[0].record_id
-        #TODO Almacenar el id de idempiere de la venta creada
+            #ws0.operations.append(Operation(ws3))
+            ws0.web_service_type = sales_order_setting.idempiere_composite_web_service_type
+
+            wsc = connection_parameter.getWebServiceConnection()
+
+            try:
+                response = wsc.send_request(ws0)
+            except Exception, e:
+                raise UserError(_('Error iDempiere: %s') % e.message)
+            wsc.print_xml_request()
+            wsc.print_xml_response()
+
+            if response.status == WebServiceResponseStatus.Error:
+                order.toSchedule(_(response.error_message))
+                return -1
+
+            #intentamos obtener el documento origen
+            C_Order_ID = response.responses[0].record_id
+            #TODO Almacenar el id de idempiere de la venta creada
         return C_Order_ID
 
         #en este sprint no hacemos offline
