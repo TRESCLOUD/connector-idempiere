@@ -60,5 +60,4 @@ class IdempiereDocumentType(models.Model):
                                     required=True, 
                                     help='The database ID of the warehouse in iDempiere')
 
-
-    
+    quotation = fields.Boolean('Quotation Doctype')

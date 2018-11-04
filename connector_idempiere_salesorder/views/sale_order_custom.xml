@@ -72,6 +72,11 @@
 	                		string="Ver en iDempiere"
 	                		attrs="{'invisible': [('c_order_id','=', 0)]}" 
 	                		class="oe_stat_button"/>
+					<button col="2" name="open_page_quotation"
+	                		type="object"
+	                		string="Ver Cotizacion en iDempiere"
+	                		attrs="{'invisible': [('quotation_id','=', 0)]}"
+	                		class="oe_stat_button"/>
 	            </xpath>              
               	<xpath expr="//field[@name='partner_id']" position="attributes">
               		<attribute name = "domain">"['|',('customer','=',True),('type','=','contact')]"</attribute>
@@ -102,6 +107,7 @@
               	</xpath>
               	<xpath expr="//field[@name='client_order_ref']" position="after">
                   	<field name="c_order_id"/>
+					<field name="quotation_id"/>
               	</xpath>              	
               	
           	</field>
